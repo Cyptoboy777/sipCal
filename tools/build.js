@@ -79,13 +79,14 @@ function layout(p) {
   const footCalcs = NAV.slice(0, 4).map(([h, l]) => `<li><a href="${h}">${esc(l)} calculator</a></li>`).join('').replace('Compound interest calculator', 'Compound interest calculator');
   const scripts = (p.calcKind
     ? `<script src="/js/calc.js" defer></script><script src="/js/render.js" defer></script><script src="/js/app.js" defer></script>`
-    : '') + `<script src="/js/pwa.js" defer></script>`;
+    : '') + `<script src="/js/theme.js" defer></script><script src="/js/pwa.js" defer></script>`;
 
   return `<!doctype html>
 <html lang="en-IN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(p.description)}">
 <link rel="canonical" href="${canonical}">
@@ -124,6 +125,7 @@ ${p.article ? '<div class="progress" aria-hidden="true"></div>' : ''}
     <a class="brand" href="/">${MARK}<span>${esc(SITE.name)}</span></a>
     <nav class="nav" aria-label="Main">${nav}</nav>
     <button type="button" class="install" data-install hidden>Install app</button>
+    <button type="button" class="theme-btn" data-theme-toggle aria-label="Switch to dark mode" title="Switch theme"><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></svg></button>
   </div>
 </header>
 ${crumbs}
@@ -188,12 +190,22 @@ function calcSection(kind, opts = {}) {
       <div data-split>${res.split}</div>
       <dl class="ledger" data-ledger>${res.ledger}</dl>
       <div class="tools">
+        <button type="button" class="btn" data-pin>Pin to compare</button>
         <button type="button" class="btn" data-share>Copy link</button>
+        <button type="button" class="btn" data-native-share hidden>Share</button>
         <button type="button" class="btn" data-csv>Download CSV</button>
         <button type="button" class="btn" data-print>Print</button>
         <span class="toast" data-toast role="status"></span>
       </div>
     </div>
+    <div class="panel whatif"><div class="panel-in">
+      <h2>What if&hellip;?</h2><p class="panel-sub">Tap a scenario to try it. Arrows show the change from your numbers.</p>
+      <div class="wi-grid" data-whatif-grid>${res.whatif}</div>
+    </div></div>
+    <div class="panel compare" data-compare hidden><div class="panel-in">
+      <div class="panel-head"><h2>Compare with your pinned result</h2><button type="button" class="link-btn" data-unpin>Clear</button></div>
+      <div data-compare-body></div>
+    </div></div>
     <div class="panel chart-card"><div class="panel-in">
       <h2>${esc(cfg.chart.title)}</h2>
       <div class="chart-wrap" data-chart-wrap><div data-chart>${res.chart}</div><div class="tip" data-tip hidden></div></div>

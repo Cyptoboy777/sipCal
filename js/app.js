@@ -15,7 +15,8 @@
   var els = {
     figure: $('[data-stmt-figure]'), note: $('[data-stmt-note]'), insight: $('[data-insight]'), ledger: $('[data-ledger]'),
     split: $('[data-split]'), chart: $('[data-chart]'), tblYear: $('[data-tbl-year]'), tblMonth: $('[data-tbl-month]'),
-    tip: $('[data-tip]'), toast: $('[data-toast]'), dock: $('[data-dock-fig]')
+    tip: $('[data-tip]'), toast: $('[data-toast]'), dock: $('[data-dock-fig]'), whatif: $('[data-whatif-grid]'),
+    compare: $('[data-compare]'), compareBody: $('[data-compare-body]')
   };
   var values = {};
   var unit = {};            // per-field display unit: 'years' | 'months' (tenure fields only)
@@ -177,8 +178,8 @@
     tpl.innerHTML = html;
     var next = tpl.firstChild, cur = els.split.querySelector('.split');
     if (!cur) { els.split.innerHTML = html; return; }
-    var cs = cur.querySelectorAll('.seg'), ns = next.querySelectorAll('.seg');
-    for (var i = 0; i < cs.length; i++) cs[i].style.flex = ns[i].style.flex;
+    cur.querySelector('.ring-a').style.strokeDasharray = next.querySelector('.ring-a').style.strokeDasharray;
+    cur.querySelector('.ring-centre').innerHTML = next.querySelector('.ring-centre').innerHTML;
     cur.setAttribute('aria-label', next.getAttribute('aria-label'));
     cur.querySelector('.split-key').innerHTML = next.querySelector('.split-key').innerHTML;
   }
@@ -204,6 +205,8 @@
     syncSplit(R.split);
     els.tblYear.innerHTML = R.table;
     if (els.tblMonth) els.tblMonth.innerHTML = R.monthTable;
+    if (els.whatif) els.whatif.innerHTML = R.whatif;
+    renderCompare();
     hideTip();
 
     if (reduce) { setFigure(R.headline); els.chart.innerHTML = R.chart; return; }
@@ -303,6 +306,81 @@
     wrap.addEventListener('pointerleave', hideTip);
     wrap.addEventListener('focusin', function (e) { if (e.target.classList.contains('hit')) showTip(e.target); });
     wrap.addEventListener('focusout', hideTip);
+  }
+
+
+  /* ---------- What-if tiles ---------- */
+  if (els.whatif) els.whatif.addEventListener('click', function (e) {
+    var tile = e.target.closest && e.target.closest('[data-whatif]');
+    if (!tile) return;
+    var item = cfg.whatif.items[+tile.getAttribute('data-whatif')];
+    var f = byName[item.field];
+    values[f.name] = FinRender.whatifValue(cfg, item, values);
+    show(f); changed();
+    say('Applied: ' + item.text.toLowerCase() + ' ' + FinRender.valueText(f, values[f.name]));
+  });
+
+  /* ---------- Pin and compare ---------- */
+  var pinned = null;
+  function snapshot() {
+    var m = last;
+    var vals = {};
+    for (var k in values) vals[k] = values[k];
+    return { values: vals, hv: m.hv, hf: m.hf, headline: m.headline, num: m.num, out: m.out };
+  }
+  function signed(hf, d) {
+    var txt = hf === 'short' ? FinCalc.short(Math.abs(d)) : FinCalc.inr(Math.abs(d));
+    if (Math.abs(d) < 0.5) return 'no change';
+    return (d > 0 ? '+' : '−') + txt;
+  }
+  function describe(f, v) {
+    if (f.type === 'select') {
+      var o = f.options.filter(function (x) { return x.v === v; })[0];
+      return o ? o.t : String(v);
+    }
+    return FinRender.valueText(f, v);
+  }
+  function renderCompare() {
+    if (!els.compare) return;
+    if (!pinned || !last) { els.compare.hidden = true; return; }
+    var m = last;
+    var rows = [[cfg.headline.label, pinned.headline, m.headline, signed(m.hf, m.hv - pinned.hv)]];
+    cfg.ledger.forEach(function (r) {
+      if (m.num[r.out] == null || pinned.num[r.out] == null) return;
+      if (r.showIf && !(values[r.showIf] > 0) && !(pinned.values[r.showIf] > 0)) return;
+      rows.push([r.label, FinCalc.inr(pinned.num[r.out]), FinCalc.inr(m.num[r.out]), signed('inr', m.num[r.out] - pinned.num[r.out])]);
+    });
+    var diffs = fields.filter(function (f) { return Math.abs(values[f.name] - pinned.values[f.name]) > 1e-9; }).map(function (f) {
+      return '<li><b>' + FinRender.esc(f.label) + '</b> ' + FinRender.esc(describe(f, pinned.values[f.name])) + ' → ' + FinRender.esc(describe(f, values[f.name])) + '</li>';
+    });
+    els.compareBody.innerHTML =
+      '<div class="cmp-table" role="table"><div class="cmp-row cmp-head" role="row"><span></span><span>Pinned</span><span>Now</span><span>Change</span></div>' +
+      rows.map(function (r) {
+        return '<div class="cmp-row" role="row"><span class="cmp-l">' + FinRender.esc(r[0]) + '</span><span>' + FinRender.esc(r[1]) + '</span><b>' + FinRender.esc(r[2]) + '</b><span class="cmp-d">' + FinRender.esc(r[3]) + '</span></div>';
+      }).join('') + '</div>' +
+      (diffs.length ? '<p class="cmp-h">What you changed since pinning</p><ul class="cmp-list">' + diffs.join('') + '</ul>' : '<p class="cmp-h">Same inputs as when you pinned. Change a number or tap a scenario to compare.</p>');
+    els.compare.hidden = false;
+  }
+  var pin = $('[data-pin]');
+  if (pin) pin.addEventListener('click', function () {
+    pinned = snapshot();
+    renderCompare();
+    say('Pinned. Now change something to compare.');
+    if (els.compare) els.compare.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' });
+  });
+  var unpin = $('[data-unpin]');
+  if (unpin) unpin.addEventListener('click', function () { pinned = null; renderCompare(); });
+
+  /* ---------- Native share sheet (phones) ---------- */
+  var nshare = $('[data-native-share]');
+  if (nshare && navigator.share) {
+    nshare.hidden = false;
+    nshare.addEventListener('click', function () {
+      var q = new URLSearchParams();
+      fields.forEach(function (f) { if (values[f.name] !== f.value) q.set(f.name, values[f.name]); });
+      var url = location.origin + location.pathname + (q.toString() ? '?' + q : '');
+      navigator.share({ title: cfg.name, text: (last ? last.insight : cfg.tagline), url: url }).catch(function () { /* cancelled */ });
+    });
   }
 
   /* ---------- schedule toggle ---------- */

@@ -167,14 +167,70 @@
     }).join('');
   }
 
+  /* Ring chart: share of the total that is interest / returns. */
   function splitHtml(cfg, m) {
     var a = m.split.a, b = m.split.b, t = a + b || 1;
     var pb = Math.round((b / t) * 1000) / 10;
     var pa = Math.round((100 - pb) * 10) / 10;
+    var C = 2 * Math.PI * 42;
+    var la = Math.max(0, (a / t) * C - (a > 0 && b > 0 ? 2.5 : 0));
     return '<div class="split" role="img" aria-label="' + esc(cfg.chart.a + ' ' + pa + ' percent, ' + cfg.chart.b + ' ' + pb + ' percent') + '">' +
-      '<div class="split-bar"><span class="seg seg-a" style="flex:' + a + '"></span><span class="seg seg-b" style="flex:' + b + '"></span></div>' +
+      '<div class="ring-wrap"><svg class="ring" viewBox="0 0 100 100" aria-hidden="true">' +
+      '<circle class="ring-b" cx="50" cy="50" r="42"/>' +
+      '<circle class="ring-a" cx="50" cy="50" r="42" style="stroke-dasharray:' + la.toFixed(2) + ' ' + C.toFixed(2) + '"/></svg>' +
+      '<div class="ring-centre"><b>' + Math.round(pb) + '%</b><span>' + esc(cfg.chart.b.toLowerCase()) + '</span></div></div>' +
       '<div class="split-key"><span><i class="dot dot-a"></i>' + esc(cfg.chart.a) + ' <b>' + pa + '%</b></span>' +
       '<span><i class="dot dot-b"></i>' + esc(cfg.chart.b) + ' <b>' + pb + '%</b></span></div></div>';
+  }
+
+  /* ---------- "What if?" scenarios ---------- */
+
+  function fieldOf(cfg, name) {
+    var all = cfg.fields.concat(cfg.advanced ? cfg.advanced.fields : []);
+    for (var i = 0; i < all.length; i++) if (all[i].name === name) return all[i];
+    return null;
+  }
+  /* The value an item would set, clamped to the field's hard limits. */
+  function whatifValue(cfg, item, v) {
+    var f = fieldOf(cfg, item.field);
+    var next = item.mult != null ? v[item.field] * item.mult : v[item.field] + item.delta;
+    if (item.field === 'rate') next = Math.round(next * 100) / 100;
+    return Math.min(f.hardMax, Math.max(f.hardMin, next));
+  }
+  function valueText(f, val) {
+    if (f.type === 'percent') return String(Math.round(val * 100) / 100) + '%';
+    if (f.type === 'years') return F.duration(Math.round(val * 12));
+    if (f.type === 'money') return F.short(val);
+    return String(val);
+  }
+  function chip(d, good, fmt) {
+    var up = d > 0;
+    return '<span class="wi-chip ' + (good ? 'good' : 'bad') + '"><i aria-hidden="true">' + (up ? '▲' : '▼') + '</i>' + esc(fmt(Math.abs(d))) + '<span class="sr"> ' + (up ? 'more' : 'less') + '</span></span>';
+  }
+  function whatifHtml(kind, cfg, v, base) {
+    var w = cfg.whatif;
+    if (!w) return '';
+    var m = base || model(kind, v);
+    var fm = function (x) { return m.hf === 'short' ? F.short(x) : F.inr(x); };
+    var tiles = w.items.map(function (item, i) {
+      var f = fieldOf(cfg, item.field);
+      var nv = whatifValue(cfg, item, v);
+      if (Math.abs(nv - v[item.field]) < 1e-9) return '';
+      var v2 = {};
+      for (var k in v) v2[k] = v[k];
+      v2[item.field] = nv;
+      var m2 = model(kind, v2);
+      var d1 = m2.hv - m.hv, d2 = m2.num[w.secondKey] - m.num[w.secondKey];
+      var g1 = (w.better.headline === 'higher') === (d1 > 0), g2 = (w.better.second === 'higher') === (d2 > 0);
+      return '<button type="button" class="wi-tile" data-whatif="' + i + '">' +
+        '<span class="wi-label">' + esc(item.text + ' ' + valueText(f, nv)) + '</span>' +
+        '<span class="wi-cap">' + esc(cfg.headline.label) + '</span>' +
+        '<span class="wi-row"><b>' + esc(m2.headline) + '</b>' + (Math.abs(d1) >= 0.5 ? chip(d1, g1, fm) : '') + '</span>' +
+        '<span class="wi-cap">' + esc(w.secondLabel) + '</span>' +
+        '<span class="wi-row small"><b>' + esc(F.short(m2.num[w.secondKey])) + '</b>' + (Math.abs(d2) >= 0.5 ? chip(d2, g2, F.short) : '') + '</span>' +
+        '</button>';
+    }).join('');
+    return tiles;
   }
 
   function niceMax(x) {
@@ -255,6 +311,7 @@
       ledger: ledgerHtml(cfg, m, v),
       split: splitHtml(cfg, m),
       chart: chartHtml(cfg, m, opts),
+      whatif: whatifHtml(kind, cfg, v, m),
       table: tableHtml(m.table, m.table.rows, m.table.head, 'tbl-year'),
       monthTable: m.table.monthRows ? tableHtml(m.table, m.table.monthRows, m.table.monthHead, 'tbl-month') : ''
     };
@@ -301,7 +358,7 @@
   }
 
   return {
-    esc: esc, model: model, chart: chartHtml,
+    esc: esc, model: model, chart: chartHtml, whatifHtml: whatifHtml, whatifValue: whatifValue, valueText: valueText, fieldOf: fieldOf,
     fmt: function (hf, v) { return hf === 'short' ? F.short(v) : F.inr(v); }, resultsHtml: resultsHtml, formHtml: formHtml, fieldHtml: fieldHtml, defaults: defaults
   };
 });

@@ -5,7 +5,7 @@ const VERSION = '__VERSION__';
 const CACHE = 'fincalc-' + VERSION;
 const CORE = [
   '/', '/offline/', '/emi-calculator/', '/sip-calculator/', '/compound-interest-calculator/', '/fd-calculator/', '/guides/',
-  '/css/style.css', '/js/calc.js', '/js/render.js', '/js/app.js', '/js/pwa.js',
+  '/css/style.css', '/js/calc.js', '/js/render.js', '/js/app.js', '/js/pwa.js', '/js/theme.js',
   '/fonts/display.woff2', '/fonts/text.woff2', '/fonts/text-italic.woff2',
   '/favicon.svg', '/img/icon-192.png'
 ];

@@ -30,8 +30,9 @@ const srv = http.createServer((q, r) => { let u = q.url.split('?')[0]; let f = p
   ok(seen.size >= 4, 'headline tweens through ' + seen.size + ' intermediate values');
   await p.waitForTimeout(700);
   ok((await p.textContent('[data-stmt-figure]')) === '₹1,30,173', 'tween lands on exact EMI for ₹1.5 Cr: ' + await p.textContent('[data-stmt-figure]'));
-  const segs = await p.evaluate(() => [...document.querySelectorAll('.seg')].map((s) => getComputedStyle(s).flexGrow));
-  ok(segs.length === 2 && +segs[0] > 0, 'split bar segments transitioned: ' + segs.join(' / '));
+  await p.fill('#f-rate', '12'); await p.waitForTimeout(1000);
+  const ring = await p.getAttribute('.ring-a', 'style');
+  ok(/stroke-dasharray/.test(ring) && !/124\.2/.test(ring), 'ring arc moves when the rate changes: ' + ring);
   await c.close();
 
   // 4. reduced motion: no animation, no hidden bars, instant exact values

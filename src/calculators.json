@@ -137,7 +137,37 @@
           "years": 10
         }
       }
-    ]
+    ],
+    "whatif": {
+      "better": {
+        "headline": "lower",
+        "second": "lower"
+      },
+      "secondKey": "interest",
+      "secondLabel": "Total interest",
+      "items": [
+        {
+          "field": "rate",
+          "delta": -1,
+          "text": "Rate"
+        },
+        {
+          "field": "rate",
+          "delta": 1,
+          "text": "Rate"
+        },
+        {
+          "field": "years",
+          "delta": -5,
+          "text": "Tenure"
+        },
+        {
+          "field": "years",
+          "delta": 5,
+          "text": "Tenure"
+        }
+      ]
+    }
   },
   "sip": {
     "slug": "sip-calculator",
@@ -284,7 +314,37 @@
           "stepUp": 10
         }
       }
-    ]
+    ],
+    "whatif": {
+      "better": {
+        "headline": "higher",
+        "second": "higher"
+      },
+      "secondKey": "gains",
+      "secondLabel": "Returns",
+      "items": [
+        {
+          "field": "rate",
+          "delta": -2,
+          "text": "Return"
+        },
+        {
+          "field": "rate",
+          "delta": 2,
+          "text": "Return"
+        },
+        {
+          "field": "years",
+          "delta": 5,
+          "text": "Period"
+        },
+        {
+          "field": "monthly",
+          "mult": 1.25,
+          "text": "SIP"
+        }
+      ]
+    }
   },
   "compound": {
     "slug": "compound-interest-calculator",
@@ -437,7 +497,37 @@
           "monthly": 5000
         }
       }
-    ]
+    ],
+    "whatif": {
+      "better": {
+        "headline": "higher",
+        "second": "higher"
+      },
+      "secondKey": "gains",
+      "secondLabel": "Interest earned",
+      "items": [
+        {
+          "field": "rate",
+          "delta": -2,
+          "text": "Rate"
+        },
+        {
+          "field": "rate",
+          "delta": 2,
+          "text": "Rate"
+        },
+        {
+          "field": "years",
+          "delta": -5,
+          "text": "Period"
+        },
+        {
+          "field": "years",
+          "delta": 5,
+          "text": "Period"
+        }
+      ]
+    }
   },
   "fd": {
     "slug": "fd-calculator",
@@ -568,6 +658,36 @@
           "years": 5
         }
       }
-    ]
+    ],
+    "whatif": {
+      "better": {
+        "headline": "higher",
+        "second": "higher"
+      },
+      "secondKey": "gains",
+      "secondLabel": "Interest earned",
+      "items": [
+        {
+          "field": "rate",
+          "delta": -1,
+          "text": "Rate"
+        },
+        {
+          "field": "rate",
+          "delta": 1,
+          "text": "Rate"
+        },
+        {
+          "field": "years",
+          "delta": -2,
+          "text": "Term"
+        },
+        {
+          "field": "years",
+          "delta": 2,
+          "text": "Term"
+        }
+      ]
+    }
   }
 }
