@@ -22,11 +22,11 @@ h1{font-size:84px;line-height:1.02;letter-spacing:-.035em;font-weight:780;max-wi
 <div class="sub">Rupees, lakh and crore. Full schedules. Nothing leaves your device.</div>
 <div class="card"><div class="l">Monthly EMI</div><div class="f">₹43,391</div><div class="bar"><i></i><i></i></div>
 <div class="row"><span>Loan amount</span><b>₹50,00,000</b></div><div class="row"><span>Total interest</span><b>₹54,13,879</b></div><div class="row" style="border:0"><span>Tenure</span><b>20 yrs</b></div></div>`;
-const icon = `<style>${css}body{width:512px;height:512px;background:#0e1b33;display:grid;place-items:center}</style>
-<svg width="360" height="360" viewBox="0 0 32 32"><path d="M8 11h16M8 16h16M8 21h9" stroke="#eef2f8" stroke-width="2.2" stroke-linecap="round" fill="none"/><circle cx="23" cy="21" r="2.6" fill="#c27f00"/></svg>`;
+const iconHtml = (n) => `<style>${css}body{width:${n}px;height:${n}px;background:#0e1b33;display:grid;place-items:center}</style>
+<svg width="${Math.round(n * 0.7)}" height="${Math.round(n * 0.7)}" viewBox="0 0 32 32"><path d="M8 11h16M8 16h16M8 21h9" stroke="#eef2f8" stroke-width="2.2" stroke-linecap="round" fill="none"/><circle cx="23" cy="21" r="2.6" fill="#c27f00"/></svg>`;
 (async () => {
   const b = await chromium.launch();
-  for (const [html, w, h, out] of [[og, 1200, 630, 'static/og-image.png'], [icon, 512, 512, 'img/icon-512.png']]) {
+  for (const [html, w, h, out] of [[og, 1200, 630, 'static/og-image.png'], [iconHtml(512), 512, 512, 'img/icon-512.png'], [iconHtml(512), 512, 512, 'img/icon-maskable-512.png'], [iconHtml(192), 192, 192, 'img/icon-192.png'], [iconHtml(180), 180, 180, 'img/apple-touch-icon.png']]) {
     const p = await b.newPage({ viewport: { width: w, height: h } });
     await p.setContent(html); await p.waitForTimeout(300);
     await p.screenshot({ path: path.join(ROOT, out) });

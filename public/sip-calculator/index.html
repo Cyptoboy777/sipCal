@@ -21,7 +21,11 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/img/icon-512.png">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="FinCalc">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preload" href="/fonts/display.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/text.woff2" as="font" type="font/woff2" crossorigin>
@@ -39,6 +43,7 @@
   <div class="wrap bar">
     <a class="brand" href="/"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="8" fill="currentColor"/><path d="M8 11h16M8 16h16M8 21h9" stroke="var(--bg)" stroke-width="2.2" stroke-linecap="round"/><circle cx="23" cy="21" r="2.6" fill="#c27f00"/></svg><span>Smart Finance Calculator</span></a>
     <nav class="nav" aria-label="Main"><a href="/emi-calculator/">EMI</a><a href="/sip-calculator/" aria-current="page">SIP</a><a href="/compound-interest-calculator/">Compound interest</a><a href="/fd-calculator/">FD</a><a href="/guides/">Guides</a></nav>
+    <button type="button" class="install" data-install hidden>Install app</button>
   </div>
 </header>
 <nav class="crumbs wrap" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">SIP Calculator</span></nav>
@@ -130,6 +135,6 @@
     <p class="fine">Smart Finance Calculator provides general information and estimates only. It is not financial, tax or investment advice, and results are not offers or guarantees from any bank or fund. Mutual fund investments are subject to market risks. Read all scheme documents carefully and consult a SEBI-registered adviser before you invest. Content last reviewed 15 November 2026. &copy; 2026 Smart Finance Calculator.</p>
   </div>
 </footer>
-<script src="/js/calc.js" defer></script><script src="/js/render.js" defer></script><script src="/js/app.js" defer></script>
+<script src="/js/calc.js" defer></script><script src="/js/render.js" defer></script><script src="/js/app.js" defer></script><script src="/js/pwa.js" defer></script>
 </body>
 </html>

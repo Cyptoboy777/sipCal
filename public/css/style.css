@@ -352,6 +352,13 @@ input[type="range"]::-moz-range-track, input[type="range"]::-moz-range-progress 
 .site-footer { border-radius: 28px 28px 0 0; }
 @media print { .dock { display: none !important; } .statement { background: #fff; color: #000; } .statement * { color: #000 !important; } }
 
+/* PWA install button (appears only when the browser offers installation) */
+.install { font: 650 .88rem var(--display); padding: .45rem .95rem; border-radius: 999px; border: 0; background: var(--accent); color: var(--accent-ink); cursor: pointer; margin-left: .3rem; }
+.install:hover { filter: brightness(1.08); }
+.install[hidden] { display: none !important; }
+@media (max-width: 760px) { .install { margin-left: auto; } .bar .nav { order: 3; } }
+@media print { .install { display: none !important; } }
+
 /* hidden unless the scroll-linked rule below enables it */
 .progress { display: none; }
 

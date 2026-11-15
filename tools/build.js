@@ -77,9 +77,9 @@ function layout(p) {
   }
 
   const footCalcs = NAV.slice(0, 4).map(([h, l]) => `<li><a href="${h}">${esc(l)} calculator</a></li>`).join('').replace('Compound interest calculator', 'Compound interest calculator');
-  const scripts = p.calcKind
+  const scripts = (p.calcKind
     ? `<script src="/js/calc.js" defer></script><script src="/js/render.js" defer></script><script src="/js/app.js" defer></script>`
-    : '';
+    : '') + `<script src="/js/pwa.js" defer></script>`;
 
   return `<!doctype html>
 <html lang="en-IN">
@@ -104,7 +104,11 @@ function layout(p) {
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/img/icon-512.png">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="FinCalc">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preload" href="/fonts/display.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/text.woff2" as="font" type="font/woff2" crossorigin>
@@ -119,6 +123,7 @@ ${p.article ? '<div class="progress" aria-hidden="true"></div>' : ''}
   <div class="wrap bar">
     <a class="brand" href="/">${MARK}<span>${esc(SITE.name)}</span></a>
     <nav class="nav" aria-label="Main">${nav}</nav>
+    <button type="button" class="install" data-install hidden>Install app</button>
   </div>
 </header>
 ${crumbs}
@@ -238,6 +243,13 @@ function build() {
 
   const order = (u) => (u === abs('/') ? 0 : 1);
   pages.sort((a, b) => order(a.url) - order(b.url) || a.url.localeCompare(b.url));
+  // Service worker: cache name changes whenever any built file changes
+  const crypto = require('crypto');
+  const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]);
+  const hash = crypto.createHash('sha1');
+  walk(OUT).sort().forEach((f) => { hash.update(path.relative(OUT, f)); hash.update(fs.readFileSync(f)); });
+  write('sw.js', fs.readFileSync(path.join(ROOT, 'static', 'sw.js'), 'utf8').replace("'__VERSION__'", "'" + hash.digest('hex').slice(0, 10) + "'"));
+
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
     pages.map((p) => `  <url><loc>${p.url}</loc><lastmod>${p.lastmod}</lastmod><changefreq>${p.freq}</changefreq><priority>${p.priority}</priority></url>`).join('\n') + `\n</urlset>\n`);
   write('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${abs('/sitemap.xml')}\n`);

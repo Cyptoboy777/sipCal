@@ -209,5 +209,20 @@ module.exports = function (ctx) {
       ])}</div>`
   };
 
-  return [about, contact, privacy, terms, disclaimer, notFound];
+  const offline = {
+    path: '/offline/',
+    noindex: true,
+    title: 'You are offline | Smart Finance Calculator',
+    description: 'You are offline. Saved calculators still work.',
+    h1: 'You are offline',
+    body: L.head('You are offline', 'This page is not saved on your device yet. The calculators you have already opened still work without a connection.') +
+      `<div class="wrap">${ctx.cardsHtml([
+        ['/emi-calculator/', 'EMI Calculator', 'Monthly instalment and repayment schedule.'],
+        ['/sip-calculator/', 'SIP Calculator', 'Grow a monthly investment.'],
+        ['/compound-interest-calculator/', 'Compound Interest Calculator', 'See interest earn interest.'],
+        ['/fd-calculator/', 'FD Calculator', 'Fixed deposit maturity amount.']
+      ])}</div>`
+  };
+
+  return [about, contact, privacy, terms, disclaimer, notFound, offline];
 };
