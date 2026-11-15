@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://smart-finance-calculator-mauve.vercel.app/sitemap.xml
+Sitemap: https://sipcalculater.vercel.app/sitemap.xml

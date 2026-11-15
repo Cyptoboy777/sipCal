@@ -17,7 +17,7 @@ const srv = http.createServer((q, r) => {
   const bad = []; let fails = 0;
   const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); if (!c) fails++; };
   const sm = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8');
-  const urls = [...sm.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1].replace('https://smart-finance-calculator-mauve.vercel.app', base));
+  const urls = [...sm.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1].replace('https://sipcalculater.vercel.app', base));
   const seen = new Set();
   for (const url of urls) {
     const p = await ctx.newPage();
