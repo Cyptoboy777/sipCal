@@ -1,0 +1,21 @@
+// Run: node tools/test_calc.js  (prints JSON of results; tools/verify_calc.py checks them against closed forms)
+const C = require('../js/calc.js');
+const out = {};
+out.emi1 = C.emi(5000000, 8.5, 240);
+const l = C.loan({ principal: 5000000, rate: 8.5, months: 240 });
+out.loan = { emi: l.emi, months: l.months, interest: l.totalInterest, lastBal: l.rows[l.rows.length-1].balance, sumPrincipal: l.rows.reduce((a,r)=>a+r.principal,0) };
+const lx = C.loanSummary({ principal: 5000000, rate: 8.5, months: 240, extra: 5000 });
+out.loanExtra = { months: lx.months, interest: lx.totalInterest, saved: lx.interestSaved, monthsSaved: lx.monthsSaved, lastBal: lx.rows[lx.rows.length-1].balance };
+out.zeroRate = C.emi(120000, 0, 12);
+const s = C.sip({ monthly: 10000, rate: 12, years: 15 });
+out.sip = { value: s.value, invested: s.invested };
+const s2 = C.sip({ monthly: 10000, rate: 12, years: 15, stepUp: 10, lumpsum: 100000, inflation: 6 });
+out.sipStep = { value: s2.value, invested: s2.invested, real: s2.realValue };
+const c = C.compound({ principal: 100000, rate: 8, years: 10, freq: 1 });
+out.ci = { value: c.value, eay: c.effectiveRate, doubling: c.doublingYears };
+const c2 = C.compound({ principal: 100000, rate: 8, years: 10, freq: 12, monthly: 5000 });
+out.ciDep = { value: c2.value, invested: c2.invested };
+const f = C.fd({ principal: 500000, rate: 7, months: 60, freq: 4 });
+out.fd = { value: f.value, eay: f.effectiveRate };
+out.fmt = [C.inr(1234567.4), C.short(12500000), C.short(250000), C.short(45000), C.words(5000000), C.duration(18)];
+console.log(JSON.stringify(out));

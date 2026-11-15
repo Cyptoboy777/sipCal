@@ -1,0 +1,10 @@
+{
+  "name": "Smart Finance Calculator",
+  "short_name": "SmartFinance",
+  "description": "EMI, SIP, compound interest and FD calculators for India.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#eef2f8",
+  "theme_color": "#0e1b33",
+  "icons": [{ "src": "/img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }]
+}

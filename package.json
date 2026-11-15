@@ -1,0 +1,11 @@
+{
+  "name": "smart-finance-calculator",
+  "version": "2.0.0",
+  "private": true,
+  "description": "EMI, SIP, compound interest and FD calculators for India. Static site, zero runtime dependencies.",
+  "scripts": {
+    "build": "node tools/build.js",
+    "test": "python3 tools/verify_calc.py"
+  },
+  "engines": { "node": ">=18" }
+}

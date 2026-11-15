@@ -1,0 +1,573 @@
+{
+  "emi": {
+    "slug": "emi-calculator",
+    "name": "EMI Calculator",
+    "nav": "EMI",
+    "tagline": "Monthly instalment, total interest and a full repayment schedule for any loan.",
+    "headline": {
+      "label": "Monthly EMI",
+      "out": "headline"
+    },
+    "fields": [
+      {
+        "name": "principal",
+        "label": "Loan amount",
+        "type": "money",
+        "min": 100000,
+        "max": 20000000,
+        "step": 50000,
+        "hardMin": 1000,
+        "hardMax": 1000000000,
+        "value": 5000000
+      },
+      {
+        "name": "rate",
+        "label": "Interest rate",
+        "type": "percent",
+        "unit": "% a year",
+        "min": 5,
+        "max": 20,
+        "step": 0.05,
+        "hardMin": 0,
+        "hardMax": 40,
+        "value": 8.5
+      },
+      {
+        "name": "years",
+        "label": "Loan tenure",
+        "type": "years",
+        "unit": "years",
+        "min": 1,
+        "max": 30,
+        "step": 0.5,
+        "hardMin": 0.25,
+        "hardMax": 40,
+        "value": 20,
+        "toggle": true
+      }
+    ],
+    "advanced": {
+      "summary": "Add a monthly prepayment",
+      "fields": [
+        {
+          "name": "extra",
+          "label": "Extra payment every month",
+          "type": "money",
+          "min": 0,
+          "max": 100000,
+          "step": 1000,
+          "hardMin": 0,
+          "hardMax": 10000000,
+          "value": 0
+        }
+      ]
+    },
+    "ledger": [
+      {
+        "out": "principal",
+        "label": "Loan amount"
+      },
+      {
+        "out": "interest",
+        "label": "Total interest"
+      },
+      {
+        "out": "total",
+        "label": "Total you pay"
+      },
+      {
+        "out": "ends",
+        "label": "Loan is cleared in"
+      },
+      {
+        "out": "saved",
+        "label": "Interest saved by prepaying",
+        "showIf": "extra"
+      },
+      {
+        "out": "earlier",
+        "label": "Cleared earlier by",
+        "showIf": "extra"
+      }
+    ],
+    "chart": {
+      "title": "Principal and interest paid each year",
+      "a": "Principal",
+      "b": "Interest"
+    },
+    "donut": {
+      "a": "Principal",
+      "b": "Interest",
+      "centre": "of what you pay is interest"
+    },
+    "table": {
+      "title": "Repayment schedule",
+      "toggle": true
+    },
+    "presets": [
+      {
+        "label": "Home loan",
+        "values": {
+          "principal": 5000000,
+          "rate": 8.5,
+          "years": 20
+        }
+      },
+      {
+        "label": "Car loan",
+        "values": {
+          "principal": 800000,
+          "rate": 9.5,
+          "years": 5
+        }
+      },
+      {
+        "label": "Personal loan",
+        "values": {
+          "principal": 300000,
+          "rate": 12,
+          "years": 3
+        }
+      },
+      {
+        "label": "Education loan",
+        "values": {
+          "principal": 1500000,
+          "rate": 9,
+          "years": 10
+        }
+      }
+    ]
+  },
+  "sip": {
+    "slug": "sip-calculator",
+    "name": "SIP Calculator",
+    "nav": "SIP",
+    "tagline": "See what a monthly mutual fund SIP can grow into, with optional step-up and inflation.",
+    "headline": {
+      "label": "Estimated value",
+      "out": "headline"
+    },
+    "fields": [
+      {
+        "name": "monthly",
+        "label": "Monthly investment",
+        "type": "money",
+        "min": 500,
+        "max": 100000,
+        "step": 500,
+        "hardMin": 100,
+        "hardMax": 10000000,
+        "value": 10000
+      },
+      {
+        "name": "rate",
+        "label": "Expected return",
+        "type": "percent",
+        "unit": "% a year",
+        "min": 1,
+        "max": 30,
+        "step": 0.1,
+        "hardMin": 0,
+        "hardMax": 50,
+        "value": 12
+      },
+      {
+        "name": "years",
+        "label": "Investment period",
+        "type": "years",
+        "unit": "years",
+        "min": 1,
+        "max": 40,
+        "step": 1,
+        "hardMin": 0.5,
+        "hardMax": 60,
+        "value": 15
+      }
+    ],
+    "advanced": {
+      "summary": "Add a lump sum, yearly step-up or inflation",
+      "fields": [
+        {
+          "name": "lumpsum",
+          "label": "Starting lump sum",
+          "type": "money",
+          "min": 0,
+          "max": 10000000,
+          "step": 10000,
+          "hardMin": 0,
+          "hardMax": 1000000000,
+          "value": 0
+        },
+        {
+          "name": "stepUp",
+          "label": "Raise the SIP every year by",
+          "type": "percent",
+          "unit": "%",
+          "min": 0,
+          "max": 25,
+          "step": 1,
+          "hardMin": 0,
+          "hardMax": 100,
+          "value": 0
+        },
+        {
+          "name": "inflation",
+          "label": "Expected inflation",
+          "type": "percent",
+          "unit": "% a year",
+          "min": 0,
+          "max": 12,
+          "step": 0.5,
+          "hardMin": 0,
+          "hardMax": 30,
+          "value": 0
+        }
+      ]
+    },
+    "ledger": [
+      {
+        "out": "invested",
+        "label": "You invest"
+      },
+      {
+        "out": "gains",
+        "label": "Estimated returns"
+      },
+      {
+        "out": "value",
+        "label": "Value at the end"
+      },
+      {
+        "out": "real",
+        "label": "Worth in today's money",
+        "showIf": "inflation"
+      }
+    ],
+    "chart": {
+      "title": "Money invested and returns, year by year",
+      "a": "Invested",
+      "b": "Returns"
+    },
+    "donut": {
+      "a": "Invested",
+      "b": "Returns",
+      "centre": "of the final value is returns"
+    },
+    "table": {
+      "title": "Year-by-year growth",
+      "toggle": false
+    },
+    "presets": [
+      {
+        "label": "₹5,000 for 10 years",
+        "values": {
+          "monthly": 5000,
+          "rate": 12,
+          "years": 10
+        }
+      },
+      {
+        "label": "₹10,000 for 15 years",
+        "values": {
+          "monthly": 10000,
+          "rate": 12,
+          "years": 15
+        }
+      },
+      {
+        "label": "₹25,000 with 10% step-up",
+        "values": {
+          "monthly": 25000,
+          "rate": 12,
+          "years": 20,
+          "stepUp": 10
+        }
+      }
+    ]
+  },
+  "compound": {
+    "slug": "compound-interest-calculator",
+    "name": "Compound Interest Calculator",
+    "nav": "Compound interest",
+    "tagline": "Watch interest earn interest, with your choice of compounding and optional monthly deposits.",
+    "headline": {
+      "label": "Maturity amount",
+      "out": "headline"
+    },
+    "fields": [
+      {
+        "name": "principal",
+        "label": "Starting amount",
+        "type": "money",
+        "min": 10000,
+        "max": 10000000,
+        "step": 10000,
+        "hardMin": 0,
+        "hardMax": 1000000000,
+        "value": 100000
+      },
+      {
+        "name": "rate",
+        "label": "Interest rate",
+        "type": "percent",
+        "unit": "% a year",
+        "min": 1,
+        "max": 20,
+        "step": 0.1,
+        "hardMin": 0,
+        "hardMax": 50,
+        "value": 8
+      },
+      {
+        "name": "years",
+        "label": "Time period",
+        "type": "years",
+        "unit": "years",
+        "min": 1,
+        "max": 40,
+        "step": 1,
+        "hardMin": 0.5,
+        "hardMax": 60,
+        "value": 10
+      },
+      {
+        "name": "freq",
+        "label": "Interest is added",
+        "type": "select",
+        "value": 1,
+        "options": [
+          {
+            "v": 1,
+            "t": "Once a year"
+          },
+          {
+            "v": 2,
+            "t": "Every 6 months"
+          },
+          {
+            "v": 4,
+            "t": "Every quarter"
+          },
+          {
+            "v": 12,
+            "t": "Every month"
+          },
+          {
+            "v": 365,
+            "t": "Every day"
+          }
+        ]
+      }
+    ],
+    "advanced": {
+      "summary": "Add a deposit every month",
+      "fields": [
+        {
+          "name": "monthly",
+          "label": "Deposit every month",
+          "type": "money",
+          "min": 0,
+          "max": 100000,
+          "step": 500,
+          "hardMin": 0,
+          "hardMax": 10000000,
+          "value": 0
+        }
+      ]
+    },
+    "ledger": [
+      {
+        "out": "invested",
+        "label": "Total you put in"
+      },
+      {
+        "out": "gains",
+        "label": "Interest earned"
+      },
+      {
+        "out": "eay",
+        "label": "Effective yearly rate"
+      },
+      {
+        "out": "double",
+        "label": "Time to double a lump sum"
+      }
+    ],
+    "chart": {
+      "title": "Money put in and interest earned, year by year",
+      "a": "Put in",
+      "b": "Interest"
+    },
+    "donut": {
+      "a": "Put in",
+      "b": "Interest",
+      "centre": "of the final amount is interest"
+    },
+    "table": {
+      "title": "Year-by-year growth",
+      "toggle": false
+    },
+    "presets": [
+      {
+        "label": "Savings, 5 years",
+        "values": {
+          "principal": 100000,
+          "rate": 6.5,
+          "years": 5,
+          "freq": 4
+        }
+      },
+      {
+        "label": "Long term, 20 years",
+        "values": {
+          "principal": 500000,
+          "rate": 8,
+          "years": 20,
+          "freq": 1
+        }
+      },
+      {
+        "label": "Save monthly",
+        "values": {
+          "principal": 100000,
+          "rate": 8,
+          "years": 10,
+          "freq": 12,
+          "monthly": 5000
+        }
+      }
+    ]
+  },
+  "fd": {
+    "slug": "fd-calculator",
+    "name": "FD Calculator",
+    "nav": "FD",
+    "tagline": "Maturity amount and interest on a cumulative fixed deposit, compounded the way banks do it.",
+    "headline": {
+      "label": "Maturity amount",
+      "out": "headline"
+    },
+    "fields": [
+      {
+        "name": "principal",
+        "label": "Deposit amount",
+        "type": "money",
+        "min": 10000,
+        "max": 10000000,
+        "step": 10000,
+        "hardMin": 1000,
+        "hardMax": 1000000000,
+        "value": 500000
+      },
+      {
+        "name": "rate",
+        "label": "Interest rate",
+        "type": "percent",
+        "unit": "% a year",
+        "min": 3,
+        "max": 10,
+        "step": 0.05,
+        "hardMin": 0,
+        "hardMax": 20,
+        "value": 7
+      },
+      {
+        "name": "years",
+        "label": "Deposit period",
+        "type": "years",
+        "unit": "years",
+        "min": 1,
+        "max": 10,
+        "step": 0.5,
+        "hardMin": 0.25,
+        "hardMax": 20,
+        "value": 5,
+        "toggle": true
+      },
+      {
+        "name": "freq",
+        "label": "Interest is added",
+        "type": "select",
+        "value": 4,
+        "options": [
+          {
+            "v": 1,
+            "t": "Once a year"
+          },
+          {
+            "v": 2,
+            "t": "Every 6 months"
+          },
+          {
+            "v": 4,
+            "t": "Every quarter"
+          },
+          {
+            "v": 12,
+            "t": "Every month"
+          }
+        ]
+      }
+    ],
+    "advanced": null,
+    "ledger": [
+      {
+        "out": "invested",
+        "label": "Amount deposited"
+      },
+      {
+        "out": "gains",
+        "label": "Interest earned"
+      },
+      {
+        "out": "eay",
+        "label": "Effective yearly yield"
+      },
+      {
+        "out": "value",
+        "label": "Maturity amount"
+      }
+    ],
+    "chart": {
+      "title": "Deposit and interest, year by year",
+      "a": "Deposit",
+      "b": "Interest"
+    },
+    "donut": {
+      "a": "Deposit",
+      "b": "Interest",
+      "centre": "of the maturity amount is interest"
+    },
+    "table": {
+      "title": "Year-by-year growth",
+      "toggle": false
+    },
+    "presets": [
+      {
+        "label": "₹5 L for 1 year",
+        "values": {
+          "principal": 500000,
+          "rate": 7,
+          "years": 1
+        }
+      },
+      {
+        "label": "₹5 L for 3 years",
+        "values": {
+          "principal": 500000,
+          "rate": 7,
+          "years": 3
+        }
+      },
+      {
+        "label": "₹10 L for 5 years",
+        "values": {
+          "principal": 1000000,
+          "rate": 7,
+          "years": 5
+        }
+      }
+    ]
+  }
+}

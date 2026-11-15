@@ -1,0 +1,15 @@
+{
+  "name": "Smart Finance Calculator",
+  "url": "https://smart-finance-calculator-mauve.vercel.app",
+  "adsensePub": "ca-pub-6915700686027349",
+  "email": "CHANGE-ME@example.com",
+  "updated": "15 November 2026",
+  "updatedISO": "2026-11-15",
+  "year": 2026,
+  "guideLinks": [
+    ["/guides/emi-tenure-vs-interest/", "Shorter or longer loan?"],
+    ["/guides/prepay-loan-or-invest/", "Prepay a loan or invest?"],
+    ["/guides/sip-step-up/", "SIP step-up explained"],
+    ["/guides/rule-of-72/", "The rule of 72"]
+  ]
+}

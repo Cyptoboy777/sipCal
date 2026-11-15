@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Rule of 72: Estimate How Fast Your Money Doubles</title>
+<meta name="description" content="Divide 72 by the annual rate to estimate how long money takes to double. See how accurate the rule is at rates from 2% to 24%, and where it misleads.">
+<link rel="canonical" href="https://smart-finance-calculator-mauve.vercel.app/guides/rule-of-72/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#eef2f8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b101c" media="(prefers-color-scheme: dark)">
+<meta name="google-adsense-account" content="ca-pub-6915700686027349">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Smart Finance Calculator">
+<meta property="og:title" content="The Rule of 72: Estimate How Fast Your Money Doubles">
+<meta property="og:description" content="Divide 72 by the annual rate to estimate how long money takes to double. See how accurate the rule is at rates from 2% to 24%, and where it misleads.">
+<meta property="og:url" content="https://smart-finance-calculator-mauve.vercel.app/guides/rule-of-72/">
+<meta property="og:locale" content="en_IN">
+<meta property="og:image" content="https://smart-finance-calculator-mauve.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/img/icon-512.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preload" href="/fonts/display.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/text.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Smart Finance Calculator","url":"https://smart-finance-calculator-mauve.vercel.app/","logo":"https://smart-finance-calculator-mauve.vercel.app/img/icon-512.png"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://smart-finance-calculator-mauve.vercel.app/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://smart-finance-calculator-mauve.vercel.app/guides/"},{"@type":"ListItem","position":3,"name":"The rule of 72","item":"https://smart-finance-calculator-mauve.vercel.app/guides/rule-of-72/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why 72 and not 70 or 69?","acceptedAnswer":{"@type":"Answer","text":"69.3 is the most accurate for continuous compounding, and 70 for low rates. Seventy-two works well at the 6 to 12% range and divides evenly by many common rates, so it is easier to use in your head."}},{"@type":"Question","name":"Can I use the rule of 72 for a SIP?","acceptedAnswer":{"@type":"Answer","text":"Not directly. It works for a single amount that grows undisturbed. With monthly contributions, use the SIP calculator."}},{"@type":"Question","name":"Does the rule work for inflation?","acceptedAnswer":{"@type":"Answer","text":"Yes. Divide 72 by the inflation rate to estimate how long it takes prices to double, or the buying power of money to halve."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"The rule of 72","description":"Divide 72 by the annual rate to estimate how long money takes to double. See how accurate the rule is at rates from 2% to 24%, and where it misleads.","inLanguage":"en-IN","dateModified":"2026-11-15","datePublished":"2026-11-15","author":{"@type":"Organization","name":"Smart Finance Calculator"},"publisher":{"@type":"Organization","name":"Smart Finance Calculator"},"mainEntityOfPage":"https://smart-finance-calculator-mauve.vercel.app/guides/rule-of-72/"}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6915700686027349" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"></div>
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="/"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="8" fill="currentColor"/><path d="M8 11h16M8 16h16M8 21h9" stroke="var(--bg)" stroke-width="2.2" stroke-linecap="round"/><circle cx="23" cy="21" r="2.6" fill="#c27f00"/></svg><span>Smart Finance Calculator</span></a>
+    <nav class="nav" aria-label="Main"><a href="/emi-calculator/">EMI</a><a href="/sip-calculator/">SIP</a><a href="/compound-interest-calculator/">Compound interest</a><a href="/fd-calculator/">FD</a><a href="/guides/" aria-current="page">Guides</a></nav>
+  </div>
+</header>
+<nav class="crumbs wrap" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/guides/">Guides</a><span aria-hidden="true">/</span><span aria-current="page">The rule of 72</span></nav>
+<main id="main">
+<div class="wrap page-head"><h1><span class="w"><span class="wi" style="--n:0">The</span></span> <span class="w"><span class="wi" style="--n:1">rule</span></span> <span class="w"><span class="wi" style="--n:2">of</span></span> <span class="w"><span class="wi" style="--n:3">72</span></span></h1><p class="lede">A mental shortcut that turns any interest rate into a doubling time, in about two seconds.</p></div><div class="wrap"><article class="prose"><p class="meta-line">Reviewed 15 November 2026 &middot; 4 min read</p>
+<h2>The rule</h2>
+<p>To estimate how many years it takes for money to double at a given annual rate of return, divide 72 by the rate. At 8%, it takes about 72 &divide; 8 = 9 years. At 12%, about 6 years. At 6%, about 12 years. It works the same way for debt that compounds against you: a loan or card balance growing at 18% roughly doubles in 4 years if left alone.</p>
+
+<h2>Where it comes from</h2>
+<p>With yearly compounding, money doubles when (1 + r)<sup>t</sup> = 2. Solving for t gives t = ln(2) &divide; ln(1 + r). For small rates, ln(1 + r) is close to r, so t is about 0.693 &divide; r, or 69.3 &divide; the rate in percent. Seventy-two is used instead of 69.3 because it is easier to divide (it has many factors: 2, 3, 4, 6, 8, 9, 12) and it corrects for the fact that the approximation is a little off at ordinary rates.</p>
+
+<h2>How accurate is it?</h2>
+<p>Here is the rule against the exact answer, with yearly compounding:</p>
+<div class="table-wrap"><table><thead><tr><th scope="col">Annual rate</th><th scope="col" style="text-align:right">Exact doubling time</th><th scope="col" style="text-align:right">Rule of 72</th><th scope="col" style="text-align:right">Error</th></tr></thead><tbody><tr><th scope="row">2%</th><td style="text-align:right">35.00 years</td><td style="text-align:right">36.00 years</td><td style="text-align:right">2.8%</td></tr><tr><th scope="row">4%</th><td style="text-align:right">17.67 years</td><td style="text-align:right">18.00 years</td><td style="text-align:right">1.9%</td></tr><tr><th scope="row">6%</th><td style="text-align:right">11.90 years</td><td style="text-align:right">12.00 years</td><td style="text-align:right">0.9%</td></tr><tr><th scope="row">8%</th><td style="text-align:right">9.01 years</td><td style="text-align:right">9.00 years</td><td style="text-align:right">-0.1%</td></tr><tr><th scope="row">10%</th><td style="text-align:right">7.27 years</td><td style="text-align:right">7.20 years</td><td style="text-align:right">-1.0%</td></tr><tr><th scope="row">12%</th><td style="text-align:right">6.12 years</td><td style="text-align:right">6.00 years</td><td style="text-align:right">-1.9%</td></tr><tr><th scope="row">15%</th><td style="text-align:right">4.96 years</td><td style="text-align:right">4.80 years</td><td style="text-align:right">-3.2%</td></tr><tr><th scope="row">18%</th><td style="text-align:right">4.19 years</td><td style="text-align:right">4.00 years</td><td style="text-align:right">-4.5%</td></tr><tr><th scope="row">24%</th><td style="text-align:right">3.22 years</td><td style="text-align:right">3.00 years</td><td style="text-align:right">-6.9%</td></tr></tbody></table></div>
+<p>The rule is very close between roughly 6% and 12%, which is where most savings and investment assumptions live. It drifts at the extremes: it slightly overstates the doubling time at low rates, and understates it at high ones. For rates above about 20%, use 70 or the exact formula in the <a href="/compound-interest-calculator/">compound interest calculator</a>, which shows the exact doubling time for any rate.</p>
+
+<h2>Useful ways to apply it</h2>
+<ul>
+<li><strong>Fixed deposits.</strong> A deposit at 7.2% doubles in about 10 years. Check the real figure for your rate in the <a href="/fd-calculator/">FD calculator</a>.</li>
+<li><strong>Inflation.</strong> At 6% inflation, prices double in about 12 years, so what costs ₹1,00,000 today could cost ₹2,00,000 then. Prices that double in twelve years halve the buying power of money that does not grow.</li>
+<li><strong>Debt.</strong> A balance growing at 36% a year doubles in about 2 years, which is why credit card debt left to compound is so dangerous.</li>
+<li><strong>Sanity checks.</strong> If a product promises to double your money in 3 years, the rule says it implies about 24% a year, which is a reason to ask hard questions.</li>
+<li><strong>Fees.</strong> A cost of 1% a year on a 8% return changes the doubling time from 9 years to about 10.3 years.</li>
+</ul>
+
+<h2>What the rule cannot do</h2>
+<p>It says nothing about regular contributions. If you add money every month, as in a SIP, money does not double on a simple schedule, because new money keeps arriving. It also assumes a steady return, while real returns vary, and it ignores tax and fees. Use it for a quick intuition, and use the calculators for numbers you plan around.</p>
+<div class="note"><strong>The one-line summary.</strong> Divide 72 by the rate to get the doubling time in years. Good between about 6% and 12%; use the exact formula elsewhere.</div></article></div><section class="narrow-left wrap" aria-labelledby="faq-h"><div class="faq"><h2 id="faq-h">Frequently asked questions</h2><details><summary>Why 72 and not 70 or 69?</summary><p>69.3 is the most accurate for continuous compounding, and 70 for low rates. Seventy-two works well at the 6 to 12% range and divides evenly by many common rates, so it is easier to use in your head.</p></details><details><summary>Can I use the rule of 72 for a SIP?</summary><p>Not directly. It works for a single amount that grows undisturbed. With monthly contributions, use the SIP calculator.</p></details><details><summary>Does the rule work for inflation?</summary><p>Yes. Divide 72 by the inflation rate to estimate how long it takes prices to double, or the buying power of money to halve.</p></details></div></section><section class="wrap related"><h2>Keep going</h2><div class="cards"><a class="card" href="/compound-interest-calculator/"><h3>Compound Interest Calculator</h3><p>Get the exact doubling time for any rate.</p></a><a class="card" href="/fd-calculator/"><h3>FD Calculator</h3><p>See how a deposit grows at your bank’s rate.</p></a></div></section>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div><h2>Smart Finance Calculator</h2><p>Free, private calculators for loans, SIPs, fixed deposits and compound growth, built for Indian rupees and the lakh/crore system.</p></div>
+      <div><h2>Calculators</h2><ul><li><a href="/emi-calculator/">EMI calculator</a></li><li><a href="/sip-calculator/">SIP calculator</a></li><li><a href="/compound-interest-calculator/">Compound interest calculator</a></li><li><a href="/fd-calculator/">FD calculator</a></li></ul></div>
+      <div><h2>Learn</h2><ul><li><a href="/guides/">All guides</a></li><li><a href="/guides/emi-tenure-vs-interest/">Shorter or longer loan?</a></li><li><a href="/guides/prepay-loan-or-invest/">Prepay a loan or invest?</a></li><li><a href="/guides/sip-step-up/">SIP step-up explained</a></li><li><a href="/guides/rule-of-72/">The rule of 72</a></li></ul></div>
+      <div><h2>Site</h2><ul><li><a href="/about/">About</a></li><li><a href="/contact/">Contact</a></li><li><a href="/privacy-policy/">Privacy policy</a></li><li><a href="/terms/">Terms of use</a></li><li><a href="/disclaimer/">Disclaimer</a></li></ul></div>
+    </div>
+    <p class="fine">Smart Finance Calculator provides general information and estimates only. It is not financial, tax or investment advice, and results are not offers or guarantees from any bank or fund. Mutual fund investments are subject to market risks. Read all scheme documents carefully and consult a SEBI-registered adviser before you invest. Content last reviewed 15 November 2026. &copy; 2026 Smart Finance Calculator.</p>
+  </div>
+</footer>
+
+</body>
+</html>
