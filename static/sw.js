@@ -45,7 +45,20 @@ async function pageRequest(request) {
   }
 }
 
-async function assetRequest(request) {
+// Code (css/js) is network-first so HTML and code can never come from different deploys.
+async function codeRequest(request) {
+  const cache = await caches.open(CACHE);
+  try {
+    const res = await Promise.race([fetch(request), timeout(4000)]);
+    if (res && res.ok) cache.put(request, res.clone());
+    return res;
+  } catch (e) {
+    return (await cache.match(request)) || Response.error();
+  }
+}
+
+// Fonts and images rarely change: serve from cache, refresh quietly.
+async function staticRequest(request) {
   const cache = await caches.open(CACHE);
   const cached = await cache.match(request);
   const refresh = fetch(request).then((res) => { if (res && res.ok) cache.put(request, res.clone()); return res; }).catch(() => cached);
@@ -59,7 +72,8 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== self.location.origin) return;           // never touch ads or third parties
   if (url.pathname === '/sw.js') return;
   if (req.mode === 'navigate') { event.respondWith(pageRequest(req)); return; }
-  if (/^\/(css|js|fonts|img)\//.test(url.pathname) || /\.(svg|png|webmanifest)$/.test(url.pathname)) {
-    event.respondWith(assetRequest(req));
+  if (/^\/(css|js)\//.test(url.pathname)) { event.respondWith(codeRequest(req)); return; }
+  if (/^\/(fonts|img)\//.test(url.pathname) || /\.(svg|png|webmanifest)$/.test(url.pathname)) {
+    event.respondWith(staticRequest(req));
   }
 });

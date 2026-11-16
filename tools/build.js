@@ -18,6 +18,7 @@ const SITE = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/site.json'), 'utf8'
 const esc = R.esc;
 
 const ctx = { F, R, esc, SITE, CALCS };
+let ASSET_V = '';
 const pages = [];     // { url, title, description, html, priority, lastmod }
 
 /* ------------------------------------------------------------------ helpers */
@@ -78,8 +79,8 @@ function layout(p) {
 
   const footCalcs = NAV.slice(0, 4).map(([h, l]) => `<li><a href="${h}">${esc(l)} calculator</a></li>`).join('').replace('Compound interest calculator', 'Compound interest calculator');
   const scripts = (p.calcKind
-    ? `<script src="/js/calc.js" defer></script><script src="/js/render.js" defer></script><script src="/js/app.js" defer></script>`
-    : '') + `<script src="/js/theme.js" defer></script><script src="/js/pwa.js" defer></script>`;
+    ? `<script src="/js/calc.js?v=${ASSET_V}" defer></script><script src="/js/render.js?v=${ASSET_V}" defer></script><script src="/js/app.js?v=${ASSET_V}" defer></script>`
+    : '') + `<script src="/js/theme.js?v=${ASSET_V}" defer></script><script src="/js/pwa.js?v=${ASSET_V}" defer></script>`;
 
   return `<!doctype html>
 <html lang="en-IN">
@@ -113,7 +114,7 @@ function layout(p) {
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preload" href="/fonts/display.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/text.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/style.css?v=${ASSET_V}">
 ${ld.map((o) => `<script type="application/ld+json">${json(o)}</script>`).join('\n')}
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${SITE.adsensePub}" crossorigin="anonymous"></script>
 </head>
@@ -238,6 +239,10 @@ function add(p) {
 }
 
 function build() {
+  // Fingerprint css/js so a new deploy can never be paired with old cached assets
+  const h = require('crypto').createHash('sha1');
+  for (const d of ['css', 'js']) for (const f of fs.readdirSync(path.join(ROOT, d)).sort()) { h.update(f); h.update(fs.readFileSync(path.join(ROOT, d, f))); }
+  ASSET_V = h.digest('hex').slice(0, 10);
   fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(OUT, { recursive: true });
   for (const d of ['css', 'js', 'fonts']) copyDir(path.join(ROOT, d), path.join(OUT, d));
@@ -260,7 +265,7 @@ function build() {
   const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]);
   const hash = crypto.createHash('sha1');
   walk(OUT).sort().forEach((f) => { hash.update(path.relative(OUT, f)); hash.update(fs.readFileSync(f)); });
-  write('sw.js', fs.readFileSync(path.join(ROOT, 'static', 'sw.js'), 'utf8').replace("'__VERSION__'", "'" + hash.digest('hex').slice(0, 10) + "'"));
+  write('sw.js', fs.readFileSync(path.join(ROOT, 'static', 'sw.js'), 'utf8').replace(/'\/(css|js)\/([\w.-]+)'/g, "'/$1/$2?v=" + ASSET_V + "'").replace("'__VERSION__'", "'" + hash.digest('hex').slice(0, 10) + "'"));
 
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
     pages.map((p) => `  <url><loc>${p.url}</loc><lastmod>${p.lastmod}</lastmod><changefreq>${p.freq}</changefreq><priority>${p.priority}</priority></url>`).join('\n') + `\n</urlset>\n`);

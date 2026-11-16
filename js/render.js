@@ -175,9 +175,9 @@
     var C = 2 * Math.PI * 42;
     var la = Math.max(0, (a / t) * C - (a > 0 && b > 0 ? 2.5 : 0));
     return '<div class="split" role="img" aria-label="' + esc(cfg.chart.a + ' ' + pa + ' percent, ' + cfg.chart.b + ' ' + pb + ' percent') + '">' +
-      '<div class="ring-wrap"><svg class="ring" viewBox="0 0 100 100" aria-hidden="true">' +
-      '<circle class="ring-b" cx="50" cy="50" r="42"/>' +
-      '<circle class="ring-a" cx="50" cy="50" r="42" style="stroke-dasharray:' + la.toFixed(2) + ' ' + C.toFixed(2) + '"/></svg>' +
+      '<div class="ring-wrap"><svg class="ring" viewBox="0 0 100 100" width="116" height="116" aria-hidden="true">' +
+      '<circle class="ring-b" cx="50" cy="50" r="42" fill="none" stroke="#c48210" stroke-width="11"/>' +
+      '<circle class="ring-a" cx="50" cy="50" r="42" fill="none" stroke="#5a92e2" stroke-width="11" style="stroke-dasharray:' + la.toFixed(2) + ' ' + C.toFixed(2) + '"/></svg>' +
       '<div class="ring-centre"><b>' + Math.round(pb) + '%</b><span>' + esc(cfg.chart.b.toLowerCase()) + '</span></div></div>' +
       '<div class="split-key"><span><i class="dot dot-a"></i>' + esc(cfg.chart.a) + ' <b>' + pa + '%</b></span>' +
       '<span><i class="dot dot-b"></i>' + esc(cfg.chart.b) + ' <b>' + pb + '%</b></span></div></div>';

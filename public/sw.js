@@ -1,11 +1,11 @@
 /* Smart Finance Calculator service worker.
    Makes the site installable and usable offline. Same-origin GET requests only, so ads and
    any third-party scripts are never touched. __VERSION__ changes on every build. */
-const VERSION = 'c0409dba49';
+const VERSION = '0e5ec71050';
 const CACHE = 'fincalc-' + VERSION;
 const CORE = [
   '/', '/offline/', '/emi-calculator/', '/sip-calculator/', '/compound-interest-calculator/', '/fd-calculator/', '/guides/',
-  '/css/style.css', '/js/calc.js', '/js/render.js', '/js/app.js', '/js/pwa.js', '/js/theme.js',
+  '/css/style.css?v=c1e364865e', '/js/calc.js?v=c1e364865e', '/js/render.js?v=c1e364865e', '/js/app.js?v=c1e364865e', '/js/pwa.js?v=c1e364865e', '/js/theme.js?v=c1e364865e',
   '/fonts/display.woff2', '/fonts/text.woff2', '/fonts/text-italic.woff2',
   '/favicon.svg', '/img/icon-192.png'
 ];
@@ -45,7 +45,20 @@ async function pageRequest(request) {
   }
 }
 
-async function assetRequest(request) {
+// Code (css/js) is network-first so HTML and code can never come from different deploys.
+async function codeRequest(request) {
+  const cache = await caches.open(CACHE);
+  try {
+    const res = await Promise.race([fetch(request), timeout(4000)]);
+    if (res && res.ok) cache.put(request, res.clone());
+    return res;
+  } catch (e) {
+    return (await cache.match(request)) || Response.error();
+  }
+}
+
+// Fonts and images rarely change: serve from cache, refresh quietly.
+async function staticRequest(request) {
   const cache = await caches.open(CACHE);
   const cached = await cache.match(request);
   const refresh = fetch(request).then((res) => { if (res && res.ok) cache.put(request, res.clone()); return res; }).catch(() => cached);
@@ -59,7 +72,8 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== self.location.origin) return;           // never touch ads or third parties
   if (url.pathname === '/sw.js') return;
   if (req.mode === 'navigate') { event.respondWith(pageRequest(req)); return; }
-  if (/^\/(css|js|fonts|img)\//.test(url.pathname) || /\.(svg|png|webmanifest)$/.test(url.pathname)) {
-    event.respondWith(assetRequest(req));
+  if (/^\/(css|js)\//.test(url.pathname)) { event.respondWith(codeRequest(req)); return; }
+  if (/^\/(fonts|img)\//.test(url.pathname) || /\.(svg|png|webmanifest)$/.test(url.pathname)) {
+    event.respondWith(staticRequest(req));
   }
 });
