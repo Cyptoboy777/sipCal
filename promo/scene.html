@@ -1,0 +1,157 @@
+<!doctype html><meta charset="utf-8">
+<style>
+@font-face{font-family:B;src:url(display.woff2);font-weight:200 800}
+@font-face{font-family:S;src:url(text.woff2);font-weight:200 900}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#0b101c;font-family:B,sans-serif;color:#f2f5fb}
+#bg{position:absolute;inset:0;background:radial-gradient(900px 900px at var(--x1,20%) var(--y1,15%),#1d4ba066,transparent 70%),radial-gradient(800px 800px at var(--x2,85%) var(--y2,80%),#c27f0040,transparent 70%),linear-gradient(180deg,#0b101c,#101a30)}
+.sc{position:absolute;inset:0;padding:0 80px;opacity:0}
+.c{position:absolute;left:80px;right:80px}
+.big{font-weight:800;font-size:128px;line-height:1.02;letter-spacing:-3px}
+.amb{color:#f0a826}
+.chip{display:inline-block;padding:14px 28px;border-radius:999px;background:#ffffff14;border:2px solid #ffffff26;font-size:36px;font-weight:600;letter-spacing:.5px}
+.card{background:#151c2c;border:2px solid #ffffff1c;border-radius:48px;padding:56px;box-shadow:0 40px 120px #0008}
+.lbl{font-size:34px;color:#94a1b8;font-weight:500;display:flex;justify-content:space-between;align-items:baseline}
+.lbl b{color:#f2f5fb;font-size:46px;font-weight:700}
+.trk{height:14px;border-radius:7px;background:#2b3650;margin:18px 0 44px;position:relative}
+.fill{position:absolute;left:0;top:0;bottom:0;border-radius:7px;background:#5a92e2}
+.knob{position:absolute;top:50%;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;background:#fff;box-shadow:0 4px 16px #0009}
+.res{background:linear-gradient(160deg,#1d4ba0,#0f2a5e);border-radius:48px;padding:56px;margin-top:36px}
+.res small{font-size:34px;color:#c9d8f5;display:block;margin-bottom:8px}
+.res .n{font-size:124px;font-weight:800;letter-spacing:-3px;line-height:1}
+.bar{display:flex;height:30px;border-radius:15px;overflow:hidden;margin-top:40px;background:#ffffff22}
+.bar i{display:block;height:100%}
+.leg{display:flex;justify-content:space-between;font-family:S;font-size:32px;color:#c9d8f5;margin-top:18px}
+.cap{font-family:S;font-size:44px;color:#c4cee0;text-align:center;line-height:1.3}
+.cap b{color:#fff;font-family:B}
+.tile{background:#151c2c;border:2px solid #ffffff1c;border-radius:40px;padding:40px 36px;width:430px;height:290px}
+.tile .k{width:84px;height:84px;border-radius:24px;background:#1d4ba0;display:flex;align-items:center;justify-content:center;margin-bottom:26px}
+.tile h3{font-size:44px;font-weight:700;line-height:1.1}
+.tile p{font-family:S;font-size:30px;color:#94a1b8;margin-top:10px}
+.url{display:inline-block;background:#f0a826;color:#1a1204;font-weight:800;font-size:60px;padding:30px 54px;border-radius:999px;letter-spacing:-1px}
+</style>
+<div id="bg"></div>
+
+<div class="sc" id="s1">
+ <div class="c" style="top:430px">
+  <div class="big" id="l1">Planning<br>a loan?</div>
+  <div class="big" id="l2" style="margin-top:30px">Starting<br>a SIP?</div>
+  <div class="big" id="l3" style="margin-top:30px">Booking<br>an FD?</div>
+  <div class="big amb" id="l4" style="margin-top:90px;font-size:140px">Know the<br>numbers first.</div>
+ </div>
+</div>
+
+<div class="sc" id="s2">
+ <div class="c" style="top:330px;text-align:center"><span class="chip">EMI Calculator</span></div>
+ <div class="c" style="top:460px">
+  <div class="card">
+   <div class="lbl">Loan amount <b id="e1"></b></div><div class="trk"><div class="fill" id="f1"></div><div class="knob" id="k1"></div></div>
+   <div class="lbl">Interest rate <b id="e2"></b></div><div class="trk"><div class="fill" id="f2"></div><div class="knob" id="k2"></div></div>
+   <div class="lbl">Tenure <b id="e3"></b></div><div class="trk" style="margin-bottom:0"><div class="fill" id="f3"></div><div class="knob" id="k3"></div></div>
+  </div>
+  <div class="res"><small>Monthly EMI</small><div class="n" id="en"></div>
+   <div class="bar"><i id="eb1" style="background:#8fb6f2"></i><i id="eb2" style="background:#f0a826"></i></div>
+   <div class="leg"><span id="el1"></span><span id="el2"></span></div></div>
+  <p class="cap" style="margin-top:60px">Full repayment schedule<br>behind <b>every</b> number</p>
+ </div>
+</div>
+
+<div class="sc" id="s3">
+ <div class="c" style="top:330px;text-align:center"><span class="chip">SIP Calculator</span></div>
+ <div class="c" style="top:460px">
+  <div class="card" style="padding:48px 56px">
+   <div class="lbl" style="font-size:32px">₹10,000 a month · 12% · 15 years</div>
+   <svg id="ch" width="866" height="520" style="margin-top:30px"></svg>
+  </div>
+  <div class="res"><small>Could grow to</small><div class="n" id="sn"></div>
+   <div class="leg" style="margin-top:30px"><span id="sl1"></span><span id="sl2"></span></div></div>
+  <p class="cap" style="margin-top:60px">Step-up, lump sum and<br><b>inflation</b> built in</p>
+ </div>
+</div>
+
+<div class="sc" id="s4">
+ <div class="c" style="top:340px"><div class="big" style="font-size:104px" id="h4">Built for<br><span class="amb">Indian money.</span></div></div>
+ <div class="c" id="grid" style="top:720px;display:flex;flex-wrap:wrap;gap:40px"></div>
+</div>
+
+<div class="sc" id="s5">
+ <div class="c" style="top:360px;text-align:center">
+  <svg id="logo" viewBox="0 0 32 32" width="200" height="200"><rect x="2" y="2" width="28" height="28" rx="8" fill="#f2f5fb"/><path d="M8 11h16M8 16h16M8 21h9" stroke="#0b101c" stroke-width="2.2" stroke-linecap="round"/><circle cx="23" cy="21" r="2.6" fill="#c27f00"/></svg>
+  <div class="big" id="t5" style="font-size:112px;margin-top:50px">Smart Finance<br>Calculator</div>
+  <p class="cap" id="p5" style="margin-top:40px;font-size:48px">EMI · SIP · FD · Compound interest</p>
+  <div id="u5" style="margin-top:110px"><span class="url">sipcalculater.vercel.app</span></div>
+  <p class="cap" id="m5" style="margin-top:60px;font-size:44px"><b>Free</b> · <b>Private</b> · Works offline</p>
+  <p class="cap" id="a5" style="margin-top:150px;font-size:34px;color:#94a1b8">Brands: reach people planning money · /advertise</p>
+ </div>
+</div>
+
+<script src="calc.js"></script><script>var F=window.FinCalc</script>
+<script>
+const $=id=>document.getElementById(id);
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const ez=x=>1-Math.pow(1-cl(x),3);            // easeOutCubic
+const ei=x=>{x=cl(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2}; // inOut
+const ob=x=>{x=cl(x);const c=1.70158,d=c+1;return 1+d*Math.pow(x-1,3)+c*Math.pow(x-1,2)}; // back
+const seg=(t,a,b)=>cl((t-a)/(b-a));
+const inr=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+const L=F.loan({principal:5e6,rate:8.5,months:240});
+const SIP=F.sip({monthly:1e4,rate:12,years:15});
+const lak=v=>'₹'+(v/1e5).toFixed(2)+' L';
+// scene windows
+const W={s1:[0,3.6],s2:[3.4,8.8],s3:[8.6,14],s4:[13.8,18.6],s5:[18.4,24]};
+function vis(id,t){const [a,b]=W[id];const f=.35;let o=1;if(id!=='s1')o=seg(t,a,a+f);if(id!=='s5')o*=1-seg(t,b-f,b);$(id).style.opacity=o;return t>=a&&t<=b}
+function pop(el,p,dy=70){el.style.opacity=ez(p*1.4);el.style.transform=`translateY(${(1-ez(p))*dy}px)`}
+// feature tiles
+const feats=[['Lakh & crore','₹12.5 L, not 1,250,000','M4 12h16M4 6h16M4 18h10'],['Dark mode','Easy on the eyes','M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z'],['Works offline','Installs like an app','M12 3v12m0 0l-4-4m4 4l4-4M5 20h14'],['No sign-up','Nothing leaves your phone','M5 12l5 5 9-10'],['What-if tests','Tap to try prepayments','M12 3l2.5 6 6.5.5-5 4.3 1.6 6.4L12 17l-5.6 3.2L8 13.8 3 9.5l6.5-.5z'],['Real schedules','Year and month tables','M4 5h16v14H4zM4 10h16M10 5v14']];
+feats.forEach(([h,p,d],i)=>{const e=document.createElement('div');e.className='tile';e.id='t'+i;e.innerHTML=`<div class="k"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg></div><h3>${h}</h3><p>${p}</p>`;$('grid').appendChild(e)});
+// SIP chart data
+const yrs=[];for(let y=1;y<=15;y++){const r=F.sip({monthly:1e4,rate:12,years:y});yrs.push([1e4*12*y,r.value])}
+const maxV=SIP.value;
+function chart(p){let s='';const w=866,h=520,n=15,bw=40,gap=(w-n*bw)/(n-1);
+ for(let i=0;i<n;i++){const k=ez(cl(p*n*1.0-i*0.55,0,1)*1);const inv=yrs[i][0],tot=yrs[i][1];const hi=inv/maxV*h*k,ht=(tot-inv)/maxV*h*k;const x=i*(bw+gap);
+  s+=`<rect x="${x}" y="${h-hi}" width="${bw}" height="${Math.max(0,hi-2)}" rx="6" fill="#5a92e2"/><rect x="${x}" y="${h-hi-ht}" width="${bw}" height="${Math.max(0,ht-2)}" rx="6" fill="#f0a826"/>`}
+ $('ch').innerHTML=s}
+function render(t){
+ // drifting glow
+ $('bg').style.setProperty('--x1',(20+12*Math.sin(t*.4))+'%');$('bg').style.setProperty('--y1',(15+8*Math.cos(t*.3))+'%');
+ $('bg').style.setProperty('--x2',(85-14*Math.sin(t*.35))+'%');$('bg').style.setProperty('--y2',(80-8*Math.cos(t*.45))+'%');
+ // S1
+ if(vis('s1',t)){[['l1',.2],['l2',.8],['l3',1.4],['l4',2.2]].forEach(([id,a])=>{pop($(id),seg(t,a,a+.6));});
+  ['l1','l2','l3'].forEach(id=>{const o=parseFloat($(id).style.opacity);const dim=id==='l3'?1:1-.55*seg(t,2.1,2.5);$(id).style.opacity=o*dim})}
+ // S2
+ if(vis('s2',t)){const u=t-W.s2[0];
+  const p=ei(seg(u,.5,2.6)); 
+  const a=ez(seg(u,.3,.9));
+  const v1=2e6+(5e6-2e6)*p,v2=6+(8.5-6)*p,v3=10+(20-10)*p;
+  // sliders animate from start to final, EMI follows
+  const cur=F.loan({principal:v1,rate:v2,months:Math.round(v3*12)});
+  $('e1').textContent='₹'+(v1/1e5).toFixed(0)+' L';$('e2').textContent=v2.toFixed(1)+'%';$('e3').textContent=Math.round(v3)+' yrs';
+  $('f1').style.width=(v1/1e7*100)+'%';$('k1').style.left=(v1/1e7*100)+'%';
+  $('f2').style.width=((v2-5)/15*100)+'%';$('k2').style.left=((v2-5)/15*100)+'%';
+  $('f3').style.width=(v3/30*100)+'%';$('k3').style.left=(v3/30*100)+'%';
+  const fin=seg(u,2.6,3.6);const e=cur.emi;
+  $('en').textContent=inr(e);
+  const tp=cur.totalPayment,pr=v1,it=tp-pr;
+  $('eb1').style.width=(pr/tp*100)+'%';$('eb2').style.width=(it/tp*100)+'%';
+  $('el1').textContent='Principal '+lak(pr);$('el2').textContent='Interest '+lak(it);
+  const cards=document.querySelectorAll('#s2 .card,#s2 .res,#s2 .cap');
+  cards.forEach((el,i)=>pop(el,seg(u,.1+i*.25,.8+i*.25),50));
+  }
+ // S3
+ if(vis('s3',t)){const u=t-W.s3[0];
+  const els=document.querySelectorAll('#s3 .card,#s3 .res,#s3 .cap');els.forEach((el,i)=>pop(el,seg(u,.1+i*.25,.8+i*.25),50));
+  const p=seg(u,.7,3.4);chart(ei(p)*1);
+  const val=SIP.value*ei(seg(u,.7,3.6));$('sn').textContent=lak(val);
+  const inv=1e4*12*15;$('sl1').textContent='Invested '+lak(inv*ei(seg(u,.7,3.6)));$('sl2').textContent='Gains '+lak((SIP.value-inv)*ei(seg(u,.7,3.6)))}
+ // S4
+ if(vis('s4',t)){const u=t-W.s4[0];pop($('h4'),seg(u,0,.6),60);
+  feats.forEach((_,i)=>{const el=$('t'+i);const p=seg(u,.5+i*.22,1.1+i*.22);el.style.opacity=ez(p*1.5);const s=.85+.15*ob(p);el.style.transform=`scale(${s}) translateY(${(1-ez(p))*40}px)`})}
+ // S5
+ if(vis('s5',t)){const u=t-W.s5[0];
+  const lg=$('logo');const lp=seg(u,.1,.9);lg.style.opacity=ez(lp*1.5);lg.style.transform=`scale(${.6+.4*ob(lp)})`;
+  pop($('t5'),seg(u,.4,1.1));pop($('p5'),seg(u,.8,1.5),40);
+  const up=seg(u,1.3,2);pop($('u5'),up,60);$('u5').style.transform+=` scale(${1+.03*Math.sin(Math.max(0,u-2)*3)})`;
+  pop($('m5'),seg(u,1.9,2.6),40);pop($('a5'),seg(u,2.6,3.2),30)}
+}
+window.render=render;render(0);
+</script>
