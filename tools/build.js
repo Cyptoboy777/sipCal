@@ -300,7 +300,7 @@ function add(p) {
   const html = layout(p);
   const rel = p.path === '/' ? 'index.html' : p.path.replace(/^\//, '') + (p.path.endsWith('/') ? 'index.html' : '');
   write(rel, html);
-  if (!p.noindex) pages.push({ url: abs(p.path), priority: p.priority || '0.6', lastmod: SITE.updatedISO, freq: p.freq || 'monthly' });
+  if (!p.noindex) pages.push({ url: abs(p.path), title: p.title || p.h1, description: p.description || '', priority: p.priority || '0.6', lastmod: SITE.updatedISO, freq: p.freq || 'monthly' });
 }
 
 function build() {
@@ -335,7 +335,15 @@ function build() {
 
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
     pages.map((p) => `  <url><loc>${p.url}</loc><lastmod>${p.lastmod}</lastmod><changefreq>${p.freq}</changefreq><priority>${p.priority}</priority></url>`).join('\n') + `\n</urlset>\n`);
-  write('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${abs('/sitemap.xml')}\n`);
+  /* Search and AI crawlers are welcome: being found by Google, Bing (which feeds ChatGPT search), Claude and others is the goal. */
+  const bots = ['Googlebot', 'Bingbot', 'OAI-SearchBot', 'ChatGPT-User', 'GPTBot', 'ClaudeBot', 'Claude-SearchBot', 'Claude-User', 'PerplexityBot', 'Google-Extended', 'Applebot', 'Applebot-Extended', 'DuckDuckBot'];
+  write('robots.txt', `User-agent: *\nAllow: /\n\n` + bots.map((b) => `User-agent: ${b}\nAllow: /\n`).join('\n') + `\nSitemap: ${abs('/sitemap.xml')}\n`);
+  /* llms.txt: a plain-text map of the site for AI assistants. */
+  const line = (p) => `- [${p.title.replace(/\s*\|.*$/, '')}](${p.url}): ${p.description}`;
+  const isGuide = (p) => p.url.includes('/guides/') && !p.url.endsWith('/guides/');
+  const calcPages = pages.filter((p) => p.url === abs('/') || /calculator/.test(p.url));
+  write('llms.txt', `# ${SITE.name}\n\n> Free EMI, SIP, compound interest and fixed deposit (FD / CD / term deposit) calculators that work in USD, EUR, GBP, INR and other currencies. Each result comes with a full schedule, a chart and the formula behind it. Calculations run in the browser; nothing a visitor types is uploaded. Results are estimates for planning, not financial advice.\n\n## Calculators\n${calcPages.map(line).join('\n')}\n\n## Guides\n${pages.filter(isGuide).map(line).join('\n')}\n\n## About\n- [About](${abs('/about/')}): who runs the site and how the numbers are checked\n- [Advertise](${abs('/advertise/')}): sponsored placements\n- [Ad policy](${abs('/ad-policy/')}): how ads are labelled and what is not accepted\n- [Contact](${abs('/contact/')}): email the site owner\n`);
+  if (SITE.indexNowKey) write(`${SITE.indexNowKey}.txt`, SITE.indexNowKey);
   write('ads.txt', `google.com, ${SITE.adsensePub.replace(/^ca-/, '')}, DIRECT, f08c47fec0942fa0\n`);
 
   if (/example\.(com|org)|CHANGE/i.test(SITE.email)) {

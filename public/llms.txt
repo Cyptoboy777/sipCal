@@ -1,0 +1,23 @@
+# Smart Finance Calculator
+
+> Free EMI, SIP, compound interest and fixed deposit (FD / CD / term deposit) calculators that work in USD, EUR, GBP, INR and other currencies. Each result comes with a full schedule, a chart and the formula behind it. Calculations run in the browser; nothing a visitor types is uploaded. Results are estimates for planning, not financial advice.
+
+## Calculators
+- [EMI, SIP, Compound Interest & FD Calculators in Any Currency](https://sipcalculater.vercel.app/): Free EMI, SIP, compound interest and FD (term deposit) calculators in USD, EUR, GBP, INR and more. Instant results with full schedules, charts and prepayment and step-up options. No sign-up.
+- [Compound Interest Calculator: Growth, Frequency & Monthly Deposits](https://sipcalculater.vercel.app/compound-interest-calculator/): Free compound interest calculator. See how money grows with yearly, quarterly, monthly or daily compounding, add monthly deposits, and find how long it takes to double.
+- [EMI Calculator: Home, Car & Personal Loan EMI with Schedule](https://sipcalculater.vercel.app/emi-calculator/): Free EMI calculator in any currency. Get your monthly EMI, total interest and a month-by-month repayment schedule, and see how prepayments cut your loan cost.
+- [FD Calculator: Fixed Deposit Maturity Amount & Interest](https://sipcalculater.vercel.app/fd-calculator/): Free fixed deposit (CD / term deposit) calculator in any currency. Work out the maturity amount, interest earned and effective yield of a cumulative FD with quarterly, monthly or yearly compounding.
+- [SIP Calculator: Mutual Fund SIP Returns with Step-Up & Inflation](https://sipcalculater.vercel.app/sip-calculator/): Free SIP (monthly investment) calculator in any currency. See what a monthly mutual fund SIP could grow to, with optional lump sum, yearly step-up and inflation-adjusted value. Results in your currency.
+
+## Guides
+- [Shorter or Longer Home Loan? What Tenure Really Costs](https://sipcalculater.vercel.app/guides/emi-tenure-vs-interest/): Compare 5 to 30 year loan tenures on the same amount and rate. See how EMI, total interest and affordability change, with a framework for choosing a tenure.
+- [How to Read a Loan Amortization Schedule](https://sipcalculater.vercel.app/guides/how-to-read-a-loan-schedule/): Learn what each column of a repayment schedule means, how interest and principal change each month, and what to check on your own loan statement.
+- [Prepay a Loan or Invest the Money? A Fair Comparison](https://sipcalculater.vercel.app/guides/prepay-loan-or-invest/): Should spare money go to a home loan prepayment or an SIP? The loan interest rate is the number to beat. See a same-cash-flow comparison across return assumptions.
+- [The Rule of 72: Estimate How Fast Your Money Doubles](https://sipcalculater.vercel.app/guides/rule-of-72/): Divide 72 by the annual rate to estimate how long money takes to double. See how accurate the rule is at rates from 2% to 24%, and where it misleads.
+- [SIP Step-Up Explained: Raise Your SIP Every Year](https://sipcalculater.vercel.app/guides/sip-step-up/): What a yearly step-up does to a SIP over 20 years, with a comparison of 0%, 5%, 10% and 15% step-ups. Learn how to pick a step-up that fits your income.
+
+## About
+- [About](https://sipcalculater.vercel.app/about/): who runs the site and how the numbers are checked
+- [Advertise](https://sipcalculater.vercel.app/advertise/): sponsored placements
+- [Ad policy](https://sipcalculater.vercel.app/ad-policy/): how ads are labelled and what is not accepted
+- [Contact](https://sipcalculater.vercel.app/contact/): email the site owner
