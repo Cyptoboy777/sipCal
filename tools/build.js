@@ -312,7 +312,8 @@ function build() {
   fs.mkdirSync(OUT, { recursive: true });
   for (const d of ['css', 'js', 'fonts']) copyDir(path.join(ROOT, d), path.join(OUT, d));
   if (fs.existsSync(path.join(ROOT, 'img'))) copyDir(path.join(ROOT, 'img'), path.join(OUT, 'img'));
-  for (const f of ['favicon.svg', 'og-image.png', 'manifest.webmanifest']) {
+  const extra = fs.readdirSync(path.join(ROOT, 'static')).filter((f) => /^google[\w]+\.html$/.test(f));   // Search Console verification files
+  for (const f of ['favicon.svg', 'og-image.png', 'manifest.webmanifest'].concat(extra)) {
     const s = path.join(ROOT, 'static', f);
     if (fs.existsSync(s)) fs.copyFileSync(s, path.join(OUT, f));
   }
