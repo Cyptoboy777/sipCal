@@ -144,6 +144,16 @@ ${p.body}
     <p class="fine">${esc(SITE.name)} provides general information and estimates only. It is not financial, tax or investment advice, and results are not offers or guarantees from any bank or fund. Mutual fund investments are subject to market risks. Read all scheme documents carefully and consult a SEBI-registered adviser before you invest. Content last reviewed ${esc(SITE.updated)}. &copy; ${SITE.year} ${esc(SITE.name)}.</p>
   </div>
 </footer>
+<dialog class="sheet" data-install-dialog aria-labelledby="inst-t">
+  <form method="dialog">
+    <h2 id="inst-t">Install Smart Finance Calculator</h2>
+    <p class="sheet-lead">It opens like an app, works offline, and takes almost no space.</p>
+    <div data-help="android" hidden><p><b>Android (Chrome)</b></p><ol><li>Tap the three-dot menu at the top right.</li><li>Choose <b>Install app</b> or <b>Add to Home screen</b>.</li><li>Tap <b>Install</b>.</li></ol><p class="sheet-note">Not in the menu yet? Open a couple of pages first. Chrome offers installation after a short while, and after clearing site data it can take a few minutes to come back.</p></div>
+    <div data-help="ios" hidden><p><b>iPhone and iPad (Safari)</b></p><ol><li>Tap the <b>Share</b> button.</li><li>Choose <b>Add to Home Screen</b>.</li><li>Tap <b>Add</b>.</li></ol><p class="sheet-note">This only works in Safari, not inside other apps' browsers.</p></div>
+    <div data-help="desktop" hidden><p><b>Computer (Chrome or Edge)</b></p><ol><li>Click the install icon at the right end of the address bar.</li><li>Or open the browser menu and choose <b>Install Smart Finance Calculator</b>.</li></ol></div>
+    <button class="btn primary">Got it</button>
+  </form>
+</dialog>
 ${scripts}
 </body>
 </html>

@@ -30,7 +30,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preload" href="/fonts/display.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/text.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/style.css?v=c1e364865e">
+<link rel="stylesheet" href="/css/style.css?v=450a796d6c">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Smart Finance Calculator","url":"https://sipcalculater.vercel.app/","logo":"https://sipcalculater.vercel.app/img/icon-512.png"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sipcalculater.vercel.app/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://sipcalculater.vercel.app/guides/"},{"@type":"ListItem","position":3,"name":"Prepay a loan or invest the money?","item":"https://sipcalculater.vercel.app/guides/prepay-loan-or-invest/"}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is it better to prepay a home loan or invest in mutual funds?","acceptedAnswer":{"@type":"Answer","text":"It depends on whether your after-tax investment return, adjusted for risk, is likely to exceed your loan rate. Prepaying gives a certain return equal to the loan rate; investing offers the chance of more, with the risk of less."}},{"@type":"Question","name":"Which saves more interest, prepaying early or late?","acceptedAnswer":{"@type":"Answer","text":"Early. Interest is charged on the outstanding balance, which is largest at the start, so a rupee prepaid in year two removes many more future interest charges than a rupee prepaid in year eighteen."}},{"@type":"Question","name":"Do I pay a penalty for prepaying?","acceptedAnswer":{"@type":"Answer","text":"For floating-rate loans to individuals, RBI rules generally prohibit prepayment charges. Fixed-rate loans and loans to non-individual borrowers may have them. Check your sanction letter."}}]}</script>
@@ -94,6 +94,16 @@
     <p class="fine">Smart Finance Calculator provides general information and estimates only. It is not financial, tax or investment advice, and results are not offers or guarantees from any bank or fund. Mutual fund investments are subject to market risks. Read all scheme documents carefully and consult a SEBI-registered adviser before you invest. Content last reviewed 15 November 2026. &copy; 2026 Smart Finance Calculator.</p>
   </div>
 </footer>
-<script src="/js/theme.js?v=c1e364865e" defer></script><script src="/js/pwa.js?v=c1e364865e" defer></script>
+<dialog class="sheet" data-install-dialog aria-labelledby="inst-t">
+  <form method="dialog">
+    <h2 id="inst-t">Install Smart Finance Calculator</h2>
+    <p class="sheet-lead">It opens like an app, works offline, and takes almost no space.</p>
+    <div data-help="android" hidden><p><b>Android (Chrome)</b></p><ol><li>Tap the three-dot menu at the top right.</li><li>Choose <b>Install app</b> or <b>Add to Home screen</b>.</li><li>Tap <b>Install</b>.</li></ol><p class="sheet-note">Not in the menu yet? Open a couple of pages first. Chrome offers installation after a short while, and after clearing site data it can take a few minutes to come back.</p></div>
+    <div data-help="ios" hidden><p><b>iPhone and iPad (Safari)</b></p><ol><li>Tap the <b>Share</b> button.</li><li>Choose <b>Add to Home Screen</b>.</li><li>Tap <b>Add</b>.</li></ol><p class="sheet-note">This only works in Safari, not inside other apps' browsers.</p></div>
+    <div data-help="desktop" hidden><p><b>Computer (Chrome or Edge)</b></p><ol><li>Click the install icon at the right end of the address bar.</li><li>Or open the browser menu and choose <b>Install Smart Finance Calculator</b>.</li></ol></div>
+    <button class="btn primary">Got it</button>
+  </form>
+</dialog>
+<script src="/js/theme.js?v=450a796d6c" defer></script><script src="/js/pwa.js?v=450a796d6c" defer></script>
 </body>
 </html>

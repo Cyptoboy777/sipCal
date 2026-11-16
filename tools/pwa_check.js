@@ -26,7 +26,25 @@ const srv = http.createServer((q, r) => { let u = q.url.split('?')[0]; let f = p
   const cached = await p.evaluate(async () => { const k = (await caches.keys())[0]; const c = await caches.open(k); return { name: k, n: (await c.keys()).length }; });
   ok(cached.n >= 14, `precache holds ${cached.n} files (${cached.name})`);
   ok(await p.evaluate(() => !!document.querySelector('link[rel=manifest]') && !!document.querySelector('[data-install]')), 'manifest linked, install button present (hidden until browser offers it)');
-  ok(await p.evaluate(() => getComputedStyle(document.querySelector('[data-install]')).display === 'none'), 'install button hidden by default');
+  ok(await p.evaluate(() => getComputedStyle(document.querySelector('[data-install]')).display !== 'none'), 'Install app button is visible (not installed yet)');
+  await p.click('[data-install]'); await p.waitForTimeout(300);
+  ok(await p.evaluate(() => { const d = document.querySelector('[data-install-dialog]'); return d.open && !d.querySelector('[data-help="desktop"]').hidden && d.querySelector('[data-help="android"]').hidden; }), 'click with no native prompt opens the help sheet (desktop steps)');
+  await p.keyboard.press('Escape'); await p.waitForTimeout(150);
+  ok(!(await p.evaluate(() => document.querySelector('[data-install-dialog]').open)), 'Escape closes the sheet');
+  const mob = await b.newContext({ userAgent: 'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 Chrome/126 Mobile Safari/537.36', viewport: { width: 390, height: 844 }, isMobile: true });
+  const mp = await mob.newPage(); await mp.goto(base + '/'); await mp.waitForTimeout(800); await mp.click('[data-install]'); await mp.waitForTimeout(300);
+  ok(await mp.evaluate(() => { const d = document.querySelector('[data-install-dialog]'); return d.open && !d.querySelector('[data-help="android"]').hidden && d.querySelector('[data-help="ios"]').hidden; }), 'Android phone sees Android steps');
+  await mp.screenshot({ path: (process.argv[2] || '/tmp') + '/install-sheet-android.png' }); await mob.close();
+  const ios = await b.newContext({ userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 Version/17.5 Mobile/15E148 Safari/604.1', viewport: { width: 390, height: 844 }, isMobile: true });
+  const ip = await ios.newPage(); await ip.goto(base + '/'); await ip.waitForTimeout(800); await ip.click('[data-install]'); await ip.waitForTimeout(300);
+  ok(await ip.evaluate(() => { const d = document.querySelector('[data-install-dialog]'); return d.open && !d.querySelector('[data-help="ios"]').hidden; }), 'iPhone sees Add to Home Screen steps');
+  await ios.close();
+  // already-installed (standalone) app should not show the button
+  const sa = await b.newContext({ viewport: { width: 390, height: 844 } });
+  await sa.addInitScript(() => { const mm = window.matchMedia.bind(window); window.matchMedia = (q) => /display-mode:\s*standalone/.test(q) ? { matches: true, media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} } : mm(q); });
+  const sp = await sa.newPage(); await sp.goto(base + '/'); await sp.waitForTimeout(600);
+  ok(await sp.evaluate(() => document.querySelector('[data-install]').hidden), 'inside the installed app the Install button is hidden');
+  await sa.close();
   await p.goto(base + '/about/'); await p.waitForTimeout(400);   // visited once, so it will be cached
 
   // go offline
