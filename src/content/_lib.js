@@ -18,15 +18,16 @@ module.exports = function lib(ctx) {
     return {
       path: `/${cfg.slug}/`,
       calcKind: o.kind,
+      ads: true,
       title: o.title,
       description: o.description,
       h1: o.h1,
       faq: o.faq,
       priority: '0.9',
       crumbs: [['/', 'Home'], [`/${cfg.slug}/`, cfg.name]],
-      body: head(o.h1, cfg.tagline) + calcSection(o.kind) +
+      body: head(o.h1, cfg.tagline) + calcSection(o.kind) + '<!--AD:afterCalc-->' +
         prose(`<p class="meta-line">Reviewed ${esc(SITE.updated)}. Formulas checked against independent calculations.</p>` + o.body) +
-        faqHtml(o.faq) + (o.related ? related(o.related) : '') + calcCards(o.kind)
+        faqHtml(o.faq) + '<!--AD:endOfPage-->' + (o.related ? related(o.related) : '') + calcCards(o.kind)
     };
   }
 
@@ -34,6 +35,7 @@ module.exports = function lib(ctx) {
     return {
       path: `/guides/${o.slug}/`,
       article: true,
+      ads: true,
       title: o.title,
       description: o.description,
       h1: o.h1,
@@ -41,7 +43,7 @@ module.exports = function lib(ctx) {
       priority: '0.7',
       crumbs: [['/', 'Home'], ['/guides/', 'Guides'], [`/guides/${o.slug}/`, o.h1]],
       body: head(o.h1, o.lede) + prose(`<p class="meta-line">Reviewed ${esc(SITE.updated)} &middot; ${o.read} min read</p>` + o.body) +
-        faqHtml(o.faq) + related(o.related)
+        faqHtml(o.faq) + '<!--AD:endOfPage-->' + related(o.related)
     };
   }
 

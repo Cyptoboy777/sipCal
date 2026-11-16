@@ -30,7 +30,7 @@ module.exports = function (ctx) {
 <p>We are open about what the tools do not know. They do not know your lender&rsquo;s fees, your tax position or what a market will return. Each page says what is left out.</p>
 
 <h2>Editorial independence</h2>
-<p>We do not sell loans, funds, deposits or insurance, and we do not take commissions or referral fees from any lender, bank or fund house. We do not recommend a particular product. The site is funded by advertising, including ads served by Google AdSense, which appear separately from our content and have no influence on what we write or how we calculate.</p>
+<p>We do not sell loans, funds, deposits or insurance, and we do not take commissions or referral fees from any lender, bank or fund house. We do not recommend a particular product. The site is funded by advertising: ads served by Google AdSense, and clearly labelled <em>Sponsored</em> placements from direct advertisers. Ads appear separately from our content, never inside the calculators or their results, and have no influence on what we write or how we calculate. See our <a href="/ad-policy/">ad policy</a>.</p>
 
 <h2>Corrections and updates</h2>
 <p>Tax rules, deposit limits and regulations change. Each page shows the date it was last reviewed, and when we learn something is out of date we update it. If you spot an error in a calculation or an article, please <a href="/contact/">tell us</a>. We read every message about accuracy.</p>
@@ -92,6 +92,7 @@ module.exports = function (ctx) {
 <li>You can learn how Google uses information from sites that use its services at <a href="https://policies.google.com/technologies/partner-sites" rel="noopener">policies.google.com/technologies/partner-sites</a>.</li>
 <li>You can opt out of some third-party vendors&rsquo; use of cookies for personalised advertising at <a href="https://www.aboutads.info" rel="noopener">aboutads.info</a>.</li>
 </ul>
+<p>Some ads are sold directly to advertisers and are labelled <em>Sponsored</em>. These are plain links: they do not set cookies on this site and do not receive your calculator inputs. When you click one, the advertiser&rsquo;s own site receives your visit and may set its own cookies, governed by its own privacy policy. We add campaign tags such as <code>utm_source</code> to the link so the advertiser can count visits from this site.</p>
 <p>Where required by law, such as for visitors in the European Economic Area, the United Kingdom and Switzerland, consent for personalised advertising is requested through a consent message, and you can change your choice at any time.</p>
 <p>You can also block or delete cookies in your browser settings. Doing so does not stop the calculators from working, but you may see ads that are less relevant to you.</p>
 
@@ -148,7 +149,7 @@ module.exports = function (ctx) {
 <p>To the fullest extent permitted by law, we are not liable for any loss or damage, including financial loss, arising from your use of, or reliance on, the site or any result it produces. The site is provided &ldquo;as is&rdquo; and &ldquo;as available&rdquo;, without warranties of any kind.</p>
 
 <h2>Third-party content and advertising</h2>
-<p>The site displays advertisements served by third parties, such as Google AdSense. We are not responsible for the content of those ads or for any dealings between you and an advertiser.</p>
+<p>The site displays advertisements served by third parties, such as Google AdSense, and sponsored placements from direct advertisers. We are not responsible for the content of those ads or for any dealings between you and an advertiser.</p>
 
 <h2>Governing law</h2>
 <p>These terms are governed by the laws of India. Any dispute will be subject to the courts of India, to the extent permitted by law.</p>
@@ -224,5 +225,83 @@ module.exports = function (ctx) {
       ])}</div>`
   };
 
-  return [about, contact, privacy, terms, disclaimer, notFound, offline];
+  const advertise = L.plainPage({
+    path: '/advertise/',
+    priority: '0.4',
+    title: 'Advertise on Smart Finance Calculator',
+    description: 'Reach people who are working out a loan, SIP or deposit. Sponsored placements on EMI, SIP, compound interest and FD calculators and finance guides.',
+    h1: 'Advertise with us',
+    lede: 'Put your product in front of people at the moment they are doing the numbers on a loan, an SIP or a deposit.',
+    body: `
+<h2>Who reads this site</h2>
+<p>Visitors come to work something out: what a home loan EMI will be, what a monthly SIP could grow to, or what a fixed deposit will return. They are mid-decision, which makes the context useful for lenders, fund houses, fintech apps, brokers, insurers and finance education. We do not publish traffic figures on this page; ask us and we will share current numbers from our own analytics.</p>
+
+<h2>Where sponsored placements appear</h2>
+<ul>
+<li><strong>After the calculator</strong>: just below the tool, before the explanatory text. Shown on EMI, SIP, compound interest and FD pages and the home page.</li>
+<li><strong>In the article</strong>: between sections of long-form content.</li>
+<li><strong>End of page</strong>: after the FAQ, before related links.</li>
+</ul>
+<p>You can target one calculator (for example, only the home loan EMI page, or only the SIP page) or the whole site. Sponsored placements never appear inside the calculator, its results, or on our policy and contact pages.</p>
+
+<h2>What a placement looks like</h2>
+<p>A clearly labelled <em>Sponsored</em> card: an optional small logo, a headline of up to about 60 characters, one or two lines of text, and a button linking to your page. It is plain HTML, so it loads fast and is not blocked as a script. Links are marked <code>rel="sponsored"</code> and tagged with UTM parameters so you can see the visits in your own analytics.</p>
+
+<h2>What we need from you</h2>
+<ul>
+<li>Advertiser name and the page the ad links to.</li>
+<li>Headline, short text, button text, and optionally a square logo.</li>
+<li>The dates you want it to run, and which calculators to target.</li>
+<li>Your registration details where the product is regulated (for example a SEBI, RBI or IRDAI registration), and any mandatory risk statement.</li>
+</ul>
+
+<h2>Rules</h2>
+<p>Every ad must follow our <a href="/ad-policy/">ad policy</a>. In short: honest claims, required disclosures, and no promises of guaranteed or assured returns. We may decline or remove any ad.</p>
+
+<h2>Get in touch</h2>
+<p>Email <a href="mailto:${SITE.email}?subject=Advertising%20enquiry">${SITE.email}</a> with the product, the audience you want and the dates. We will reply with availability and terms. Please do not send payment or banking details by email before we have agreed terms in writing.</p>`
+  });
+
+  const adPolicy = L.plainPage({
+    path: '/ad-policy/',
+    priority: '0.3',
+    title: 'Ad Policy',
+    description: 'How advertising works on Smart Finance Calculator: how ads are labelled, what we accept, and what we never allow.',
+    h1: 'Ad policy',
+    lede: 'How ads are shown on this site, and what we will not accept.',
+    body: `
+<h2>How ads are shown</h2>
+<ul>
+<li>Every ad is labelled <em>Advertisement</em> (served by Google) or <em>Sponsored</em> (sold directly).</li>
+<li>Ads are kept apart from content. They never sit inside a calculator, its inputs, its results or its schedule tables, and they do not appear on this policy, privacy, terms, disclaimer or contact pages.</li>
+<li>Ads do not change the numbers. Advertisers cannot influence a calculation, a formula, an example or what we write in a guide.</li>
+<li>We do not show pop-ups, interstitials or ads that cover the page.</li>
+</ul>
+
+<h2>What we do not accept</h2>
+<ul>
+<li>Claims of guaranteed, assured or risk-free returns on market-linked products.</li>
+<li>Ads for investment advice or portfolio management from anyone who is not registered with the relevant regulator.</li>
+<li>Unlicensed lending, predatory or misleading loan offers, and loan apps that hide fees or interest rates.</li>
+<li>Get-rich-quick schemes, unregulated crypto or trading tips, binary options, and gambling.</li>
+<li>Misleading, fake-urgency or fake-testimonial creative, and anything that imitates our site or a bank.</li>
+<li>Adult, illegal or hateful content.</li>
+</ul>
+
+<h2>What advertisers must include</h2>
+<ul>
+<li>Required statements, for example &ldquo;Mutual fund investments are subject to market risks. Read all scheme related documents carefully.&rdquo;</li>
+<li>Honest descriptions of rates, fees and eligibility, with a landing page that matches the ad.</li>
+<li>Regulatory registration where the law requires one. The advertiser is responsible for complying with SEBI, RBI, IRDAI and advertising standards rules.</li>
+</ul>
+
+<h2>Our independence</h2>
+<p>We do not recommend any advertised product, and an ad is not an endorsement. Always read the terms of any product yourself and, for investments, consult a registered adviser. See the <a href="/disclaimer/">disclaimer</a>.</p>
+
+<h2>Report an ad</h2>
+<p>If an ad looks misleading or inappropriate, email <a href="mailto:${SITE.email}?subject=Ad%20report">${SITE.email}</a> with the page and a description. We review reports and remove ads that break this policy. Google ads can also be reported using the controls in the ad itself.</p>
+<p>Interested in advertising? See <a href="/advertise/">Advertise with us</a>.</p>`
+  });
+
+  return [about, contact, privacy, terms, disclaimer, advertise, adPolicy, notFound, offline];
 };

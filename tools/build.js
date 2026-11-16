@@ -10,12 +10,14 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
-const OUT = path.join(ROOT, 'public');
+const OUT = process.env.OUT_DIR ? path.resolve(process.env.OUT_DIR) : path.join(ROOT, 'public');
 const F = require(path.join(ROOT, 'js/calc.js'));
 const R = require(path.join(ROOT, 'js/render.js'));
 const CALCS = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/calculators.json'), 'utf8'));
 const SITE = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/site.json'), 'utf8'));
 const esc = R.esc;
+const ADS = JSON.parse(fs.readFileSync(process.env.ADS_FILE || path.join(ROOT, 'src/ads.json'), 'utf8'));
+const TODAY = process.env.BUILD_DATE || new Date().toISOString().slice(0, 10);
 
 const ctx = { F, R, esc, SITE, CALCS };
 let ASSET_V = '';
@@ -49,6 +51,49 @@ const NAV = [
 const MARK = '<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="8" fill="currentColor"/>' +
   '<path d="M8 11h16M8 16h16M8 21h9" stroke="var(--bg)" stroke-width="2.2" stroke-linecap="round"/><circle cx="23" cy="21" r="2.6" fill="#c27f00"/></svg>';
 
+
+/* ---------------------------------------------------------------------- ads */
+// A slot shows, in priority order: an active matching direct sponsor, then a Google ad
+// (only if its slot id is set), else nothing. No "advertise here" placeholders.
+function pageKeys(p) {
+  const k = ['*'];
+  if (p.path === '/') k.push('home');
+  if (p.calcKind && p.path !== '/') k.push(p.calcKind);
+  if (p.path.startsWith('/guides/')) { k.push('guides'); k.push(p.path.replace(/^\/guides\/|\/$/g, '')); }
+  return k;
+}
+function sponsorFor(name, p) {
+  const keys = pageKeys(p);
+  return (ADS.sponsors || []).find((s) => s.active !== false &&
+    (!s.start || s.start <= TODAY) && (!s.end || s.end >= TODAY) &&
+    (s.placements || []).includes(name) && (s.pages || ['*']).some((x) => keys.includes(x)));
+}
+function utm(url, s) {
+  try { const u = new URL(url); u.searchParams.set('utm_source', 'sipcalculater'); u.searchParams.set('utm_medium', 'sponsor'); u.searchParams.set('utm_campaign', s.id); return u.toString(); } catch (e) { return url; }
+}
+function adSlot(name, p) {
+  const s = sponsorFor(name, p);
+  if (s) {
+    const im = s.image ? `<img src="${esc(s.image.src)}" alt="${esc(s.image.alt || '')}" width="${+s.image.width || 96}" height="${+s.image.height || 96}" loading="lazy">` : '';
+    return `<aside class="ad ad-sponsor" aria-label="Sponsored" data-sponsor="${esc(s.id)}"><p class="ad-label">Sponsored <a href="/ad-policy/">Ad policy</a></p><a class="ad-body" href="${esc(utm(s.url, s))}" target="_blank" rel="sponsored noopener noreferrer">${im}<span class="ad-copy"><b>${esc(s.headline)}</b><span>${esc(s.text)}</span></span><span class="ad-cta">${esc(s.cta || 'Learn more')}</span></a><p class="ad-by">Advertiser: ${esc(s.name)}</p></aside>`;
+  }
+  const slot = ADS.adsense && ADS.adsense.slots && ADS.adsense.slots[name];
+  if (slot) {
+    return `<aside class="ad ad-google" aria-label="Advertisement"><p class="ad-label">Advertisement</p><ins class="adsbygoogle" style="display:block" data-ad-client="${esc(ADS.adsense.client || SITE.adsensePub)}" data-ad-slot="${esc(slot)}" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>`;
+  }
+  return '';
+}
+function placeAds(html, p) {
+  if (p.ads) {
+    const at = html.indexOf('<article class="prose">');
+    if (at >= 0) {
+      let n = 0;
+      html = html.slice(0, at) + html.slice(at).replace(/<h2[ >]/g, (m) => (++n === 3 ? '<!--AD:inContent-->' + m : m));
+    }
+  }
+  return html.replace(/<!--AD:(\w+)-->/g, (_, name) => (p.ads ? adSlot(name, p) : ''));
+}
+
 /* ------------------------------------------------------------------- layout */
 
 function layout(p) {
@@ -80,7 +125,7 @@ function layout(p) {
   const footCalcs = NAV.slice(0, 4).map(([h, l]) => `<li><a href="${h}">${esc(l)} calculator</a></li>`).join('').replace('Compound interest calculator', 'Compound interest calculator');
   const scripts = (p.calcKind
     ? `<script src="/js/calc.js?v=${ASSET_V}" defer></script><script src="/js/render.js?v=${ASSET_V}" defer></script><script src="/js/app.js?v=${ASSET_V}" defer></script>`
-    : '') + `<script src="/js/theme.js?v=${ASSET_V}" defer></script><script src="/js/pwa.js?v=${ASSET_V}" defer></script>`;
+    : '') + `<script src="/js/theme.js?v=${ASSET_V}" defer></script><script src="/js/pwa.js?v=${ASSET_V}" defer></script>` + (p.ads ? `<script src="/js/ads.js?v=${ASSET_V}" defer></script>` : '');
 
   return `<!doctype html>
 <html lang="en-IN">
@@ -116,7 +161,7 @@ function layout(p) {
 <link rel="preload" href="/fonts/text.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/css/style.css?v=${ASSET_V}">
 ${ld.map((o) => `<script type="application/ld+json">${json(o)}</script>`).join('\n')}
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${SITE.adsensePub}" crossorigin="anonymous"></script>
+${p.ads ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${SITE.adsensePub}" crossorigin="anonymous"></script>` : ''}
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -131,7 +176,7 @@ ${p.article ? '<div class="progress" aria-hidden="true"></div>' : ''}
 </header>
 ${crumbs}
 <main id="main">
-${p.body}
+${placeAds(p.body, p)}
 </main>
 <footer class="site-footer">
   <div class="wrap">
@@ -139,7 +184,7 @@ ${p.body}
       <div><h2>${esc(SITE.name)}</h2><p>Free, private calculators for loans, SIPs, fixed deposits and compound growth, built for Indian rupees and the lakh/crore system.</p></div>
       <div><h2>Calculators</h2><ul>${footCalcs}</ul></div>
       <div><h2>Learn</h2><ul><li><a href="/guides/">All guides</a></li>${SITE.guideLinks.map(([h, l]) => `<li><a href="${h}">${esc(l)}</a></li>`).join('')}</ul></div>
-      <div><h2>Site</h2><ul><li><a href="/about/">About</a></li><li><a href="/contact/">Contact</a></li><li><a href="/privacy-policy/">Privacy policy</a></li><li><a href="/terms/">Terms of use</a></li><li><a href="/disclaimer/">Disclaimer</a></li></ul></div>
+      <div><h2>Site</h2><ul><li><a href="/about/">About</a></li><li><a href="/contact/">Contact</a></li><li><a href="/advertise/">Advertise</a></li><li><a href="/privacy-policy/">Privacy policy</a></li><li><a href="/ad-policy/">Ad policy</a></li><li><a href="/terms/">Terms of use</a></li><li><a href="/disclaimer/">Disclaimer</a></li></ul></div>
     </div>
     <p class="fine">${esc(SITE.name)} provides general information and estimates only. It is not financial, tax or investment advice, and results are not offers or guarantees from any bank or fund. Mutual fund investments are subject to market risks. Read all scheme documents carefully and consult a SEBI-registered adviser before you invest. Content last reviewed ${esc(SITE.updated)}. &copy; ${SITE.year} ${esc(SITE.name)}.</p>
   </div>

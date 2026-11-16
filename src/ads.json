@@ -1,0 +1,22 @@
+{
+  "_help": "Edit this file to run ads. 'adsense.slots': paste ad-unit IDs from AdSense (Ads > By ad unit). Empty slot = no Google ad there. 'sponsors': direct advertisers. A matching active sponsor replaces the Google ad in that slot. Redeploy after editing.",
+  "adsense": {
+    "client": "ca-pub-6915700686027349",
+    "slots": { "afterCalc": "", "inContent": "", "endOfPage": "" }
+  },
+  "sponsors": [],
+  "_example": {
+    "id": "acme-mf-2026-q4",
+    "name": "Acme Mutual Fund",
+    "active": true,
+    "start": "2026-12-01",
+    "end": "2026-12-31",
+    "placements": ["afterCalc", "endOfPage"],
+    "pages": ["sip", "home", "guides"],
+    "headline": "Start a SIP in 5 minutes",
+    "text": "Paperless KYC, no paperwork. Mutual fund investments are subject to market risks.",
+    "cta": "Learn more",
+    "url": "https://example.com/sip",
+    "image": { "src": "/img/sponsors/acme.png", "alt": "Acme logo", "width": 96, "height": 96 }
+  }
+}

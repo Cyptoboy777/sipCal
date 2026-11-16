@@ -33,6 +33,7 @@ ${calcSection('emi')}
 <div class="wrap"><p class="meta-line">The EMI calculator above starts with a ${inr(5000000)} loan at 8.5% over 20 years. Change any number to try your own. Looking for something else? Pick a calculator below.</p></div>
 <div class="wrap"><h2 style="margin-top:1.4rem">What do you want to work out?</h2></div>
 ${index}
+<!--AD:afterCalc-->
 
 <div class="wrap"><article class="prose">
 <h2>How these calculators work</h2>
@@ -57,6 +58,7 @@ ${index}
 </article></div>
 
 ${faqHtml(faq)}
+<!--AD:endOfPage-->
 
 <section class="wrap related"><h2>Guides</h2>${cardsHtml([
     ['/guides/emi-tenure-vs-interest/', 'Shorter or longer loan?', 'See what stretching a home loan from 15 to 30 years really costs.', 'Loans'],
@@ -68,6 +70,7 @@ ${faqHtml(faq)}
   return [{
     path: '/',
     calcKind: 'emi',
+    ads: true,
     title: 'EMI, SIP, Compound Interest & FD Calculators for India',
     description: 'Free EMI, SIP, compound interest and FD calculators for India. Instant results in rupees, lakh and crore with full schedules, charts and prepayment and step-up options. No sign-up.',
     h1: 'Smart Finance Calculator',

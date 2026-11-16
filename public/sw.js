@@ -1,11 +1,11 @@
 /* Smart Finance Calculator service worker.
    Makes the site installable and usable offline. Same-origin GET requests only, so ads and
    any third-party scripts are never touched. __VERSION__ changes on every build. */
-const VERSION = '00f17e5b35';
+const VERSION = 'cedc42edd5';
 const CACHE = 'fincalc-' + VERSION;
 const CORE = [
   '/', '/offline/', '/emi-calculator/', '/sip-calculator/', '/compound-interest-calculator/', '/fd-calculator/', '/guides/',
-  '/css/style.css?v=450a796d6c', '/js/calc.js?v=450a796d6c', '/js/render.js?v=450a796d6c', '/js/app.js?v=450a796d6c', '/js/pwa.js?v=450a796d6c', '/js/theme.js?v=450a796d6c',
+  '/css/style.css?v=c1e24071c7', '/js/calc.js?v=c1e24071c7', '/js/render.js?v=c1e24071c7', '/js/app.js?v=c1e24071c7', '/js/pwa.js?v=c1e24071c7', '/js/theme.js?v=c1e24071c7',
   '/fonts/display.woff2', '/fonts/text.woff2', '/fonts/text-italic.woff2',
   '/favicon.svg', '/img/icon-192.png'
 ];

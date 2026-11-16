@@ -556,3 +556,19 @@ input[type="range"]::-moz-range-track, input[type="range"]::-moz-range-progress 
 
   :root[data-theme="dark"] .theme-btn .i-sun { display: block; }
   :root[data-theme="dark"] .theme-btn .i-moon { display: none; }
+
+/* ---- Ads: always labelled, never inside tools or results ---- */
+.ad{max-width:var(--wrap,1120px);margin:2.2rem auto;padding:0 1rem}
+.ad-label{margin:0 0 .35rem;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;gap:.6rem;justify-content:space-between}
+.ad-label a{text-transform:none;letter-spacing:0;color:var(--muted)}
+.ad-google ins{min-height:90px}
+.ad:has(ins[data-ad-status="unfilled"]){display:none}
+.ad-sponsor .ad-body{display:flex;align-items:center;gap:1rem;padding:1rem 1.1rem;border:1px solid var(--line);border-radius:14px;background:var(--surface-2);color:var(--ink,inherit);text-decoration:none;transition:border-color .2s,transform .2s}
+.ad-sponsor .ad-body:hover{border-color:var(--muted);transform:translateY(-1px)}
+.ad-sponsor img{border-radius:10px;flex:none;object-fit:contain}
+.ad-copy{display:flex;flex-direction:column;gap:.15rem;flex:1;min-width:0}
+.ad-copy span{color:var(--muted);font-size:.92rem}
+.ad-cta{flex:none;padding:.5rem .9rem;border-radius:999px;background:var(--ink,#111);color:var(--surface);font-weight:600;font-size:.9rem}
+.ad-by{margin:.35rem 0 0;font-size:.75rem;color:var(--muted)}
+@media(max-width:560px){.ad-sponsor .ad-body{flex-wrap:wrap}.ad-cta{width:100%;text-align:center}}
+@media print{.ad{display:none}}
