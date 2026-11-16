@@ -39,3 +39,7 @@ All ad config lives in `src/ads.json`. Redeploy (push to GitHub) after editing.
 - Reporting for advertisers: links carry `utm_source=sipcalculater&utm_medium=sponsor&utm_campaign=<id>`. Enable Vercel Web Analytics for page-view numbers.
 - Visitors in the EEA/UK need Google's consent message (AdSense > Privacy & messaging).
 - Test: `node tools/ads_check.js`.
+
+## Currencies
+
+The site is global: each calculator has a currency picker (USD, EUR, GBP, INR, AUD, CAD, SGD, AED, ZAR, JPY, PKR, BDT). Pages are prerendered in `defaultCurrency` (`src/site.json`, USD). In the browser the currency comes from `?cur=`, then the visitor's saved choice, then their time zone/locale. Large amounts read as `$1.25 M`, or as lakh/crore for INR, PKR and BDT. Switching currency rescales untouched default amounts (`k` per currency in `js/calc.js`) and keeps numbers the visitor typed. Add a currency by adding a line to `CURRENCIES` in `js/calc.js`. Test: `node tools/currency_check.js`.

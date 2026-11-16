@@ -19,7 +19,14 @@ const esc = R.esc;
 const ADS = JSON.parse(fs.readFileSync(process.env.ADS_FILE || path.join(ROOT, 'src/ads.json'), 'utf8'));
 const TODAY = process.env.BUILD_DATE || new Date().toISOString().slice(0, 10);
 
-const ctx = { F, R, esc, SITE, CALCS };
+/* The pages are prerendered in one default currency; visitors can switch it in the calculator. */
+F.setCurrency(SITE.defaultCurrency || 'USD');
+const KDEF = F.factor(F.getCurrency());
+Object.keys(CALCS).forEach((k) => { CALCS[k] = R.scaleCfg(CALCS[k], KDEF); });
+/* A(n): an INR-sized example amount expressed in the default currency (exact for USD/EUR/GBP). */
+const A = (n) => Math.round(n * KDEF * 100) / 100;
+
+const ctx = { F, R, esc, SITE, CALCS, A };
 let ASSET_V = '';
 const pages = [];     // { url, title, description, html, priority, lastmod }
 
@@ -113,13 +120,13 @@ function layout(p) {
     ld.push({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: p.crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c[1], item: abs(c[0]) })) });
   }
   if (p.calcKind) {
-    ld.push({ '@context': 'https://schema.org', '@type': 'WebApplication', name: CALCS[p.calcKind].name, url: canonical, applicationCategory: 'FinanceApplication', operatingSystem: 'Any', inLanguage: 'en-IN', offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' } });
+    ld.push({ '@context': 'https://schema.org', '@type': 'WebApplication', name: CALCS[p.calcKind].name, url: canonical, applicationCategory: 'FinanceApplication', operatingSystem: 'Any', inLanguage: 'en', offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' } });
   }
   if (p.faq && p.faq.length) {
     ld.push({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: p.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: stripTags(a) } })) });
   }
   if (p.article) {
-    ld.push({ '@context': 'https://schema.org', '@type': 'Article', headline: p.h1 || title, description: p.description, inLanguage: 'en-IN', dateModified: SITE.updatedISO, datePublished: SITE.updatedISO, author: { '@type': 'Organization', name: SITE.name }, publisher: { '@type': 'Organization', name: SITE.name }, mainEntityOfPage: canonical });
+    ld.push({ '@context': 'https://schema.org', '@type': 'Article', headline: p.h1 || title, description: p.description, inLanguage: 'en', dateModified: SITE.updatedISO, datePublished: SITE.updatedISO, author: { '@type': 'Organization', name: SITE.name }, publisher: { '@type': 'Organization', name: SITE.name }, mainEntityOfPage: canonical });
   }
 
   const footCalcs = NAV.slice(0, 4).map(([h, l]) => `<li><a href="${h}">${esc(l)} calculator</a></li>`).join('').replace('Compound interest calculator', 'Compound interest calculator');
@@ -128,7 +135,7 @@ function layout(p) {
     : '') + `<script src="/js/theme.js?v=${ASSET_V}" defer></script><script src="/js/pwa.js?v=${ASSET_V}" defer></script>` + (p.ads ? `<script src="/js/ads.js?v=${ASSET_V}" defer></script>` : '');
 
   return `<!doctype html>
-<html lang="en-IN">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -145,7 +152,7 @@ function layout(p) {
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(p.description)}">
 <meta property="og:url" content="${canonical}">
-<meta property="og:locale" content="en_IN">
+<meta property="og:locale" content="en_US">
 <meta property="og:image" content="${abs('/og-image.png')}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -181,7 +188,7 @@ ${placeAds(p.body, p)}
 <footer class="site-footer">
   <div class="wrap">
     <div class="foot-grid">
-      <div><h2>${esc(SITE.name)}</h2><p>Free, private calculators for loans, SIPs, fixed deposits and compound growth, built for Indian rupees and the lakh/crore system.</p></div>
+      <div><h2>${esc(SITE.name)}</h2><p>Free, private calculators for loans, SIPs, fixed deposits and compound growth, in your own currency: dollars, euros, pounds, rupees and more.</p></div>
       <div><h2>Calculators</h2><ul>${footCalcs}</ul></div>
       <div><h2>Learn</h2><ul><li><a href="/guides/">All guides</a></li>${SITE.guideLinks.map(([h, l]) => `<li><a href="${h}">${esc(l)}</a></li>`).join('')}</ul></div>
       <div><h2>Site</h2><ul><li><a href="/about/">About</a></li><li><a href="/contact/">Contact</a></li><li><a href="/advertise/">Advertise</a></li><li><a href="/privacy-policy/">Privacy policy</a></li><li><a href="/ad-policy/">Ad policy</a></li><li><a href="/terms/">Terms of use</a></li><li><a href="/disclaimer/">Disclaimer</a></li></ul></div>
@@ -228,12 +235,15 @@ function calcSection(kind, opts = {}) {
   const hasMonth = !!res.monthTable;
   const tabs = `<div class="wrap"><nav class="tabs" aria-label="Switch calculator">${Object.keys(CALCS).map((k) =>
     `<a href="/${CALCS[k].slug}/"${k === kind ? ' aria-current="page"' : ''}>${esc(CALCS[k].nav)}</a>`).join('')}</nav></div>`;
+  const curSel = `<div class="cur-row"><label for="cur-${kind}">Currency</label><select id="cur-${kind}" data-currency aria-label="Currency">${Object.keys(F.currencies).map((c) =>
+    `<option value="${c}"${c === F.getCurrency() ? ' selected' : ''}>${c} ${esc(F.currencies[c].sym.trim())} · ${esc(F.currencies[c].name)}</option>`).join('')}</select></div>`;
   const chips = (cfg.presets || []).length
     ? `<div class="chips" role="group" aria-label="Quick examples"><span class="chips-label">Try an example</span>${cfg.presets.map((p, i) =>
-      `<button type="button" class="chip" data-preset="${i}" aria-pressed="false">${esc(p.label)}</button>`).join('')}</div>` : '';
+      `<button type="button" class="chip" data-preset="${i}" aria-pressed="false">${esc(R.presetLabel(p.label))}</button>`).join('')}</div>` : '';
   return tabs + `<section class="calc wrap" data-calc="${kind}" aria-label="${esc(cfg.name)}">
   <div class="panel inputs"><div class="panel-in">
     <div class="panel-head"><h2 class="panel-title">Your numbers</h2><button type="button" class="link-btn" data-reset>Reset</button></div>
+    ${curSel}
     ${chips}
     <form data-form onsubmit="return false" autocomplete="off">${R.formHtml(cfg, idp)}</form>
   </div></div>
@@ -275,7 +285,7 @@ function calcSection(kind, opts = {}) {
     </div></div>
   </div>
   <div class="dock" data-dock aria-hidden="true"><span class="dock-label">${esc(cfg.headline.label)}</span><span class="dock-fig" data-dock-fig>${esc(res.headline)}</span><a class="dock-go" href="#results" tabindex="-1">Details</a></div>
-  <script type="application/json" id="calc-config">${json(Object.assign({ slug: cfg.slug }, cfg))}</script>
+  <script type="application/json" id="calc-config">${json(Object.assign({ slug: cfg.slug, cur: F.getCurrency(), k: KDEF }, cfg))}</script>
 </section>
 <noscript><div class="wrap"><p class="noscript">The figures shown are for the default inputs. Turn on JavaScript to change them and recalculate.</p></div></noscript>`;
 }

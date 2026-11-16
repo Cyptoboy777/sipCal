@@ -11,10 +11,10 @@ module.exports = function (ctx) {
     title: 'About Smart Finance Calculator',
     description: 'Who runs Smart Finance Calculator, how the calculators are built and checked, and how the site is funded.',
     h1: 'About this site',
-    lede: 'Smart Finance Calculator is a free set of money calculators for people in India, with the working shown.',
+    lede: 'Smart Finance Calculator is a free set of money calculators for people anywhere, with the working shown.',
     body: `
 <h2>What this site is for</h2>
-<p>Most people meet big financial numbers in a hurry: a loan offer with an EMI printed on it, a SIP projection in a brochure, a deposit rate on a bank poster. The figure is rarely explained. We built these calculators so you can see how the number is made, change the assumptions, and read the full schedule behind it, in rupees and in the lakh and crore format you already think in.</p>
+<p>Most people meet big financial numbers in a hurry: a loan offer with an EMI printed on it, a SIP projection in a brochure, a deposit rate on a bank poster. The figure is rarely explained. We built these calculators so you can see how the number is made, change the assumptions, and read the full schedule behind it, in your own currency and in the number format you already use.</p>
 
 <h2>What you will find here</h2>
 <ul>
@@ -106,7 +106,7 @@ module.exports = function (ctx) {
 <p>This site is intended for a general audience and is not directed at children under 13. We do not knowingly collect personal information from children.</p>
 
 <h2>Your rights</h2>
-<p>Because we do not hold personal information about you beyond what is described above, there is usually nothing for us to access or delete. If you have emailed us and want your message deleted, or you have any question about how your information is handled, contact us at ${mail}. Depending on where you live, you may have rights under laws such as India&rsquo;s Digital Personal Data Protection Act, 2023, or other applicable data protection laws.</p>
+<p>Because we do not hold personal information about you beyond what is described above, there is usually nothing for us to access or delete. If you have emailed us and want your message deleted, or you have any question about how your information is handled, contact us at ${mail}. Depending on where you live, you may have rights under laws such as the EU and UK GDPR, California&rsquo;s CCPA, or India&rsquo;s Digital Personal Data Protection Act, 2023.</p>
 
 <h2>Changes to this policy</h2>
 <p>If we change this policy, we will update the date at the top of this page. Please check it from time to time.</p>
@@ -185,7 +185,7 @@ module.exports = function (ctx) {
 <p>Tax laws, regulatory limits and product terms change. Where we mention them, the information is a summary that was reviewed on the date shown on the page, and it may be out of date by the time you read it. Check current rules with the relevant authority or a qualified professional.</p>
 
 <h2>Seek professional advice</h2>
-<p>Before you borrow, invest or make any significant financial decision, consult a qualified professional, such as a SEBI-registered investment adviser, a chartered accountant or a lawyer, who can consider your full circumstances.</p>
+<p>Before you borrow, invest or make any significant financial decision, consult a qualified professional, such as a licensed or registered financial adviser, an accountant or a lawyer, who can consider your full circumstances.</p>
 
 <h2>External links</h2>
 <p>We may link to third-party websites for reference. We do not control or endorse their content.</p>
@@ -252,7 +252,7 @@ module.exports = function (ctx) {
 <li>Advertiser name and the page the ad links to.</li>
 <li>Headline, short text, button text, and optionally a square logo.</li>
 <li>The dates you want it to run, and which calculators to target.</li>
-<li>Your registration details where the product is regulated (for example a SEBI, RBI or IRDAI registration), and any mandatory risk statement.</li>
+<li>Your registration details where the product is regulated (for example a registration with the SEC, FCA, SEBI or another national regulator), and any mandatory risk statement.</li>
 </ul>
 
 <h2>Rules</h2>
@@ -292,7 +292,7 @@ module.exports = function (ctx) {
 <ul>
 <li>Required statements, for example &ldquo;Mutual fund investments are subject to market risks. Read all scheme related documents carefully.&rdquo;</li>
 <li>Honest descriptions of rates, fees and eligibility, with a landing page that matches the ad.</li>
-<li>Regulatory registration where the law requires one. The advertiser is responsible for complying with SEBI, RBI, IRDAI and advertising standards rules.</li>
+<li>Regulatory registration where the law requires one. The advertiser is responsible for complying with financial-services and advertising rules in every country where the ad is shown.</li>
 </ul>
 
 <h2>Our independence</h2>

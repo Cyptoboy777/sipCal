@@ -10,32 +10,68 @@
 
   /* ---------- formatting ---------- */
 
+  /* Currency: symbol, number locale, compact style and a size factor relative to INR (k), used to
+     scale example amounts so defaults feel normal in each currency (k = 1 means the INR defaults). */
+  var CURRENCIES = {
+    USD: { sym: '$', loc: 'en-US', style: 'intl', k: 0.04, name: 'US dollar' },
+    EUR: { sym: '€', loc: 'en-IE', style: 'intl', k: 0.04, name: 'Euro' },
+    GBP: { sym: '£', loc: 'en-GB', style: 'intl', k: 0.03, name: 'British pound' },
+    INR: { sym: '₹', loc: 'en-IN', style: 'indian', k: 1, name: 'Indian rupee' },
+    AUD: { sym: 'A$', loc: 'en-AU', style: 'intl', k: 0.06, name: 'Australian dollar' },
+    CAD: { sym: 'C$', loc: 'en-CA', style: 'intl', k: 0.05, name: 'Canadian dollar' },
+    SGD: { sym: 'S$', loc: 'en-SG', style: 'intl', k: 0.05, name: 'Singapore dollar' },
+    AED: { sym: 'AED\u00a0', loc: 'en-AE', style: 'intl', k: 0.15, name: 'UAE dirham' },
+    ZAR: { sym: 'R', loc: 'en-ZA', style: 'intl', k: 0.7, name: 'South African rand' },
+    JPY: { sym: '¥', loc: 'ja-JP', style: 'intl', k: 5, name: 'Japanese yen' },
+    PKR: { sym: 'Rs\u00a0', loc: 'en-IN', style: 'indian', k: 3, name: 'Pakistani rupee' },
+    BDT: { sym: '৳', loc: 'en-IN', style: 'indian', k: 1.5, name: 'Bangladeshi taka' }
+  };
+  var cur = 'USD';
+  function setCurrency(code) { if (CURRENCIES[code]) cur = code; return cur; }
+  function getCurrency() { return cur; }
+  function symbol() { return CURRENCIES[cur].sym; }
+  function factor(code) { return (CURRENCIES[code] || CURRENCIES.USD).k; }
+
   function num(x, digits) {
     var d = digits == null ? 0 : digits;
-    return Number(x).toLocaleString('en-IN', { minimumFractionDigits: d, maximumFractionDigits: d });
+    var loc = CURRENCIES[cur].loc === 'ja-JP' ? 'en-US' : CURRENCIES[cur].loc;
+    return Number(x).toLocaleString(loc, { minimumFractionDigits: d, maximumFractionDigits: d });
   }
 
-  /** ₹12,34,567 */
+  /** $12,345 / ₹12,34,567 */
   function inr(x) {
     var v = Math.round(Number(x) || 0);
-    return (v < 0 ? '-' : '') + '₹' + num(Math.abs(v));
+    return (v < 0 ? '-' : '') + symbol() + num(Math.abs(v));
   }
 
-  /** ₹1.25 Cr / ₹12.50 L / ₹45,000 */
+  /** ₹1.25 Cr / ₹12.50 L   or   $1.25 M / $2.10 B   or the full number when small */
   function short(x) {
     var v = Number(x) || 0;
     var a = Math.abs(v);
     var sign = v < 0 ? '-' : '';
-    if (a >= 1e7) return sign + '₹' + (a / 1e7).toFixed(2) + ' Cr';
-    if (a >= 1e5) return sign + '₹' + (a / 1e5).toFixed(2) + ' L';
+    var S = symbol();
+    if (CURRENCIES[cur].style === 'indian') {
+      if (a >= 1e7) return sign + S + (a / 1e7).toFixed(2) + ' Cr';
+      if (a >= 1e5) return sign + S + (a / 1e5).toFixed(2) + ' L';
+    } else {
+      if (a >= 1e12) return sign + S + (a / 1e12).toFixed(2) + ' T';
+      if (a >= 1e9) return sign + S + (a / 1e9).toFixed(2) + ' B';
+      if (a >= 1e6) return sign + S + (a / 1e6).toFixed(2) + ' M';
+    }
     return inr(v);
   }
 
-  /** Words for an amount: "twelve lakh" style helper used under inputs. */
+  /** Words for an amount shown under inputs: "12.5 lakh" or "12.5 million". */
   function words(x) {
     var a = Math.abs(Number(x) || 0);
-    if (a >= 1e7) return trim(a / 1e7) + ' crore';
-    if (a >= 1e5) return trim(a / 1e5) + ' lakh';
+    if (CURRENCIES[cur].style === 'indian') {
+      if (a >= 1e7) return trim(a / 1e7) + ' crore';
+      if (a >= 1e5) return trim(a / 1e5) + ' lakh';
+    } else {
+      if (a >= 1e12) return trim(a / 1e12) + ' trillion';
+      if (a >= 1e9) return trim(a / 1e9) + ' billion';
+      if (a >= 1e6) return trim(a / 1e6) + ' million';
+    }
     if (a >= 1e3) return trim(a / 1e3) + ' thousand';
     return String(Math.round(a));
   }
@@ -198,6 +234,11 @@
 
   return {
     num: num,
+    currencies: CURRENCIES,
+    setCurrency: setCurrency,
+    getCurrency: getCurrency,
+    symbol: symbol,
+    factor: factor,
     inr: inr,
     short: short,
     words: words,

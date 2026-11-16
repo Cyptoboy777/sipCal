@@ -572,3 +572,9 @@ input[type="range"]::-moz-range-track, input[type="range"]::-moz-range-progress 
 .ad-by{margin:.35rem 0 0;font-size:.75rem;color:var(--muted)}
 @media(max-width:560px){.ad-sponsor .ad-body{flex-wrap:wrap}.ad-cta{width:100%;text-align:center}}
 @media print{.ad{display:none}}
+
+/* ---- Currency picker ---- */
+.cur-row{display:flex;align-items:center;gap:.6rem;margin:0 0 .9rem}
+.cur-row label{font-size:.85rem;color:var(--muted);font-weight:600}
+.cur-row select{font:inherit;font-size:.92rem;padding:.45rem 2rem .45rem .8rem;border:1px solid var(--line);border-radius:999px;background:var(--surface-2);color:inherit;max-width:100%}
+.cur-row select:focus-visible{outline:2px solid currentColor;outline-offset:2px}

@@ -290,7 +290,7 @@
     },
     "presets": [
       {
-        "label": "₹5,000 for 10 years",
+        "label": "{5000} for 10 years",
         "values": {
           "monthly": 5000,
           "rate": 12,
@@ -298,7 +298,7 @@
         }
       },
       {
-        "label": "₹10,000 for 15 years",
+        "label": "{10000} for 15 years",
         "values": {
           "monthly": 10000,
           "rate": 12,
@@ -306,7 +306,7 @@
         }
       },
       {
-        "label": "₹25,000 with 10% step-up",
+        "label": "{25000} with 10% step-up",
         "values": {
           "monthly": 25000,
           "rate": 12,
@@ -635,7 +635,7 @@
     },
     "presets": [
       {
-        "label": "₹5 L for 1 year",
+        "label": "{500000} for 1 year",
         "values": {
           "principal": 500000,
           "rate": 7,
@@ -643,7 +643,7 @@
         }
       },
       {
-        "label": "₹5 L for 3 years",
+        "label": "{500000} for 3 years",
         "values": {
           "principal": 500000,
           "rate": 7,
@@ -651,7 +651,7 @@
         }
       },
       {
-        "label": "₹10 L for 5 years",
+        "label": "{1000000} for 5 years",
         "values": {
           "principal": 1000000,
           "rate": 7,

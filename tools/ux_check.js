@@ -7,7 +7,7 @@ const srv = http.createServer((q, r) => { let u = q.url.split('?')[0]; let f = p
   await new Promise((ok) => srv.listen(4181, ok));
   const b = await chromium.launch(); let fails = 0;
   const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); if (!c) fails++; };
-  const c = await b.newContext({ viewport: { width: 1280, height: 900 } });
+  const c = await b.newContext({ timezoneId: 'Asia/Kolkata', viewport: { width: 1280, height: 900 } });
   const errs = []; const p = await c.newPage(); p.on('pageerror', (e) => errs.push(String(e)));
   await p.goto('http://localhost:4181/emi-calculator/'); await p.waitForTimeout(1400);
   // presets
@@ -36,7 +36,7 @@ const srv = http.createServer((q, r) => { let u = q.url.split('?')[0]; let f = p
   await c.close();
 
   // mobile dock
-  const m = await b.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+  const m = await b.newContext({ timezoneId: 'Asia/Kolkata', viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
   const mp = await m.newPage(); await mp.goto('http://localhost:4181/sip-calculator/'); await mp.waitForTimeout(1500);
   const shown = await mp.evaluate(() => document.querySelector('[data-dock]').classList.contains('show'));
   ok(shown, 'floating result bar shows while inputs are on screen');

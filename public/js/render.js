@@ -317,6 +317,49 @@
     };
   }
 
+
+  /* ---------- currency scaling ---------- */
+  var NICE = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 7.5, 8, 10];
+  function nice(x) {
+    if (!(x > 0)) return x;
+    var e = Math.pow(10, Math.floor(Math.log(x) / Math.LN10)), m = x / e, best = NICE[0], bd = Infinity;
+    for (var i = 0; i < NICE.length; i++) { var d = Math.abs(Math.log(m / NICE[i])); if (d < bd) { bd = d; best = NICE[i]; } }
+    return Math.round(best * e * 1e6) / 1e6;
+  }
+  /* x * k, kept exact when it is already a short number (e.g. 32,000), otherwise rounded to a friendly one. */
+  function fx(x, k) {
+    var r = x * k;
+    if (Math.abs(Number(r.toPrecision(3)) - r) <= Math.abs(r) * 1e-9) return Number(r.toPrecision(3));
+    return nice(r);
+  }
+  /* Returns a copy of cfg with money amounts multiplied by k (rounded to friendly numbers). */
+  function scaleCfg(cfg, k) {
+    var c = JSON.parse(JSON.stringify(cfg));
+    if (k === 1) return c;
+    var money = {};
+    var lists = [c.fields].concat(c.advanced ? [c.advanced.fields] : []);
+    lists.forEach(function (list) {
+      list.forEach(function (f) {
+        if (f.type !== 'money') return;
+        money[f.name] = true;
+        ['min', 'max', 'step', 'hardMin', 'hardMax', 'value'].forEach(function (key) {
+          if (f[key] != null && f[key] > 0) f[key] = fx(f[key], k);
+        });
+                if (f.step < 1) f.step = 1;
+      });
+    });
+    (c.presets || []).forEach(function (p) {
+      Object.keys(p.values).forEach(function (n) { if (money[n]) p.values[n] = fx(p.values[n], k); });
+      p.label = p.label.replace(/\{(\d+(?:\.\d+)?)\}/g, function (_, n) { return '{' + fx(+n, k) + '}'; });
+    });
+    if (c.whatif) c.whatif.items.forEach(function (it) { if (money[it.field] && it.delta != null) it.delta = fx(Math.abs(it.delta), k) * (it.delta < 0 ? -1 : 1); });
+    return c;
+  }
+  /* "{5000} for 10 years" -> "$5,000 for 10 years" in the current currency */
+  function presetLabel(label) {
+    return label.replace(/\{(\d+(?:\.\d+)?)\}/g, function (_, n) { return F.short(+n); });
+  }
+
   /* ---------- input fields ---------- */
 
   function fieldHtml(f, idPrefix) {
@@ -330,7 +373,7 @@
     var isMoney = f.type === 'money';
     return '<div class="field" data-type="' + f.type + '" data-name="' + f.name + '">' +
       '<div class="field-top"><label for="' + id + '">' + esc(f.label) + '</label>' +
-      '<div class="num-wrap">' + (isMoney ? '<span class="pre" aria-hidden="true">₹</span>' : '') +
+      '<div class="num-wrap">' + (isMoney ? '<span class="pre" aria-hidden="true">' + esc(F.symbol()) + '</span>' : '') +
       '<input class="num" id="' + id + '" name="' + f.name + '" data-field="' + f.name + '" type="text" inputmode="decimal" autocomplete="off" value="' + (isMoney ? F.num(f.value) : f.value) + '"' +
       ' data-min="' + f.hardMin + '" data-max="' + f.hardMax + '">' +
       (f.toggle
@@ -358,7 +401,7 @@
   }
 
   return {
-    esc: esc, model: model, chart: chartHtml, whatifHtml: whatifHtml, whatifValue: whatifValue, valueText: valueText, fieldOf: fieldOf,
+    esc: esc, scaleCfg: scaleCfg, presetLabel: presetLabel, model: model, chart: chartHtml, whatifHtml: whatifHtml, whatifValue: whatifValue, valueText: valueText, fieldOf: fieldOf,
     fmt: function (hf, v) { return hf === 'short' ? F.short(v) : F.inr(v); }, resultsHtml: resultsHtml, formHtml: formHtml, fieldHtml: fieldHtml, defaults: defaults
   };
 });

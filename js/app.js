@@ -18,6 +18,8 @@
     tip: $('[data-tip]'), toast: $('[data-toast]'), dock: $('[data-dock-fig]'), whatif: $('[data-whatif-grid]'),
     compare: $('[data-compare]'), compareBody: $('[data-compare-body]')
   };
+  var cfg0 = cfg, defaultCur = cfg.cur || 'USD';
+  var curSel = $('[data-currency]');
   var values = {};
   var unit = {};            // per-field display unit: 'years' | 'months' (tenure fields only)
   var last = null;
@@ -33,6 +35,12 @@
     return Math.min(f.hardMax, Math.max(f.hardMin, n));
   }
   function inMonths(f) { return unit[f.name] === 'months'; }
+  function query() {
+    var q = new URLSearchParams();
+    fields.forEach(function (f) { if (values[f.name] !== f.value) q.set(f.name, values[f.name]); });
+    if (curNow !== defaultCur) q.set('cur', curNow);
+    return q.toString();
+  }
   function fmt(f, n) {
     if (f.type === 'money') return FinCalc.num(n);
     if (inMonths(f)) return String(Math.round(n * 12));
@@ -63,6 +71,47 @@
 
   /* ---------- start-up: URL first, then the prerendered defaults ---------- */
   var params = new URLSearchParams(location.search);
+
+  /* ---------- currency: remembered choice, then the visitor's region, then the page default ---------- */
+  var REGION = { US: 'USD', GB: 'GBP', IN: 'INR', AU: 'AUD', CA: 'CAD', SG: 'SGD', AE: 'AED', ZA: 'ZAR', JP: 'JPY', PK: 'PKR', BD: 'BDT',
+    DE: 'EUR', FR: 'EUR', ES: 'EUR', IT: 'EUR', NL: 'EUR', IE: 'EUR', PT: 'EUR', BE: 'EUR', AT: 'EUR', FI: 'EUR', GR: 'EUR' };
+  function detectCurrency() {
+    try {
+      var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      if (/^Asia\/(Kolkata|Calcutta)$/.test(tz)) return 'INR';
+      if (tz === 'Asia/Karachi') return 'PKR';
+      if (tz === 'Asia/Dhaka') return 'BDT';
+      if (tz === 'Asia/Dubai') return 'AED';
+      if (tz === 'Asia/Singapore') return 'SGD';
+      var lang = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+      var m = /[-_]([A-Za-z]{2})$/.exec(lang);
+      if (m && REGION[m[1].toUpperCase()]) return REGION[m[1].toUpperCase()];
+    } catch (e) { /* ignore */ }
+    return defaultCur;
+  }
+  function savedCurrency() { try { return localStorage.getItem('sf-currency'); } catch (e) { return null; } }
+  var curNow = cfg.cur;
+  function applyCurrency(code) {
+    if (!FinCalc.currencies[code]) code = defaultCur;
+    var old = {};
+    fields.forEach(function (f) { old[f.name] = f.value; });
+    FinCalc.setCurrency(code);
+    cfg = FinRender.scaleCfg(cfg0, FinCalc.factor(code) / (cfg0.k || 1));
+    fields = cfg.fields.concat(cfg.advanced ? cfg.advanced.fields : []);
+    byName = {};
+    fields.forEach(function (f) {
+      byName[f.name] = f;
+      if (f.type === 'money' && values[f.name] != null && Math.abs(values[f.name] - old[f.name]) > 1e-9) return;   // keep what the visitor typed
+      if (values[f.name] != null) values[f.name] = f.value;
+    });
+    curNow = code;
+    if (curSel) curSel.value = code;
+    root.querySelectorAll('.pre').forEach(function (e) { e.textContent = FinCalc.symbol(); });
+    root.querySelectorAll('[data-preset]').forEach(function (c) { c.textContent = FinRender.presetLabel(cfg.presets[+c.getAttribute('data-preset')].label); });
+  }
+  FinCalc.setCurrency(cfg.cur || 'USD');
+  var wantCur = params.get('cur') || savedCurrency() || detectCurrency();
+  if (wantCur !== curNow) applyCurrency(wantCur);
   fields.forEach(function (f) {
     values[f.name] = params.has(f.name) ? clamp(f, parse(params.get(f.name))) : f.value;
     if (f.toggle) unit[f.name] = 'years';
@@ -119,6 +168,15 @@
     unit[f.name] = b.getAttribute('data-unit');
     wrapEl.querySelectorAll('[data-unit]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
     show(f);
+  });
+
+  if (curSel) curSel.addEventListener('change', function () {
+    applyCurrency(curSel.value);
+    try { localStorage.setItem('sf-currency', curNow); } catch (e) { /* ignore */ }
+    fields.forEach(show);
+    last = null;
+    changed();
+    say('Currency: ' + FinCalc.currencies[curNow].name);
   });
 
   /* ---------- presets + reset ---------- */
@@ -253,9 +311,7 @@
   function writeUrl() {
     clearTimeout(urlTimer);
     urlTimer = setTimeout(function () {
-      var q = new URLSearchParams();
-      fields.forEach(function (f) { if (values[f.name] !== f.value) q.set(f.name, values[f.name]); });
-      var s = q.toString();
+      var s = query();
       try { history.replaceState(null, '', location.pathname + (s ? '?' + s : '')); } catch (e) { /* ignore */ }
     }, 250);
   }
@@ -376,9 +432,7 @@
   if (nshare && navigator.share) {
     nshare.hidden = false;
     nshare.addEventListener('click', function () {
-      var q = new URLSearchParams();
-      fields.forEach(function (f) { if (values[f.name] !== f.value) q.set(f.name, values[f.name]); });
-      var url = location.origin + location.pathname + (q.toString() ? '?' + q : '');
+      var url = location.origin + location.pathname + (query() ? '?' + query() : '');
       navigator.share({ title: cfg.name, text: (last ? last.insight : cfg.tagline), url: url }).catch(function () { /* cancelled */ });
     });
   }
@@ -402,9 +456,7 @@
   }
   var share = $('[data-share]');
   if (share) share.addEventListener('click', function () {
-    var q = new URLSearchParams();
-    fields.forEach(function (f) { if (values[f.name] !== f.value) q.set(f.name, values[f.name]); });
-    var url = location.origin + location.pathname + (q.toString() ? '?' + q : '');
+    var url = location.origin + location.pathname + (query() ? '?' + query() : '');
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(url).then(function () { say('Link copied'); }, function () { say(url); });
     } else say(url);
@@ -415,7 +467,7 @@
     var t = last.table;
     var head = monthly && t.monthHead ? t.monthHead : t.head;
     var rows = monthly && t.monthRows ? t.monthRows : t.rows;
-    var clean = function (c) { return String(c).replace(/[₹,]/g, ''); };
+    var clean = function (c) { c = String(c); return /\d/.test(c) && /^[^\d\-]*[\d,]+(\.\d+)?$/.test(c) ? c.replace(/[^\d.\-]/g, '') : c; };
     var text = [head.join(',')].concat(rows.map(function (r) { return r.map(clean).join(','); })).join('\n');
     var a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([text], { type: 'text/csv' }));

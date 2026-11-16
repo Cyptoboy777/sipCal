@@ -9,7 +9,7 @@ const srv = http.createServer((q, r) => { let u = q.url.split('?')[0]; let f = p
   const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); if (!c) fails++; };
 
   // 1. load sequence frames
-  const c = await b.newContext({ viewport: { width: 1280, height: 820 } });
+  const c = await b.newContext({ timezoneId: 'Asia/Kolkata', viewport: { width: 1280, height: 820 } });
   const p = await c.newPage(); await p.goto('http://localhost:4176/', { waitUntil: 'commit' });
   for (const ms of [250, 700, 1800]) { await p.waitForTimeout(ms === 250 ? 250 : ms === 700 ? 450 : 1100); await p.screenshot({ path: `${OUTD}/seq-${ms}.png` }); }
   const figEnd = await p.textContent('[data-stmt-figure]');
@@ -36,7 +36,7 @@ const srv = http.createServer((q, r) => { let u = q.url.split('?')[0]; let f = p
   await c.close();
 
   // 4. reduced motion: no animation, no hidden bars, instant exact values
-  const rc = await b.newContext({ viewport: { width: 1280, height: 820 }, reducedMotion: 'reduce' });
+  const rc = await b.newContext({ timezoneId: 'Asia/Kolkata', viewport: { width: 1280, height: 820 }, reducedMotion: 'reduce' });
   const rp = await rc.newPage(); await rp.goto('http://localhost:4176/emi-calculator/'); await rp.waitForTimeout(150);
   const r = await rp.evaluate(() => ({ fig: document.querySelector('[data-stmt-figure]').textContent, cls: document.querySelector('.chart-svg').getAttribute('class'), anim: [...document.querySelectorAll('.wi')].every((e) => getComputedStyle(e).animationName === 'none') }));
   ok(r.fig === '₹43,391' && !/pre/.test(r.cls) && r.anim, `reduced motion: instant values, bars visible, no word animation (${r.fig}, ${r.cls})`);
@@ -46,11 +46,11 @@ const srv = http.createServer((q, r) => { let u = q.url.split('?')[0]; let f = p
   const jc = await b.newContext({ viewport: { width: 1280, height: 820 }, javaScriptEnabled: false });
   const jp = await jc.newPage(); await jp.goto('http://localhost:4176/sip-calculator/'); await jp.waitForTimeout(1500);
   const j = await jp.evaluate(() => ({ fig: document.querySelector('[data-stmt-figure]').textContent, words: (document.querySelector('main').innerText.match(/\S+/g) || []).length, bars: document.querySelectorAll('.bar').length, h1op: getComputedStyle(document.querySelector('h1 .wi')).opacity }));
-  ok(j.fig === '₹50.46 L' && j.words > 1000 && j.bars > 10, `no-JS: results ${j.fig}, ${j.words} words, ${j.bars} bars all present`);
+  ok(j.fig === '$201,830' && j.words > 1000 && j.bars > 10, `no-JS: results ${j.fig}, ${j.words} words, ${j.bars} bars all present`);
   await jc.close();
 
   // 6. guide: progress bar + page transition css present
-  const gc = await b.newContext({ viewport: { width: 1280, height: 820 } });
+  const gc = await b.newContext({ timezoneId: 'Asia/Kolkata', viewport: { width: 1280, height: 820 } });
   const gp = await gc.newPage(); await gp.goto('http://localhost:4176/guides/rule-of-72/');
   await gp.evaluate(() => window.scrollTo(0, document.body.scrollHeight / 2)); await gp.waitForTimeout(300);
   const pr = await gp.evaluate(() => { const e = document.querySelector('.progress'); return e ? getComputedStyle(e).transform : null; });

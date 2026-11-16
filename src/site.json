@@ -1,6 +1,7 @@
 {
   "name": "Smart Finance Calculator",
   "url": "https://sipcalculater.vercel.app",
+  "defaultCurrency": "USD",
   "adsensePub": "ca-pub-6915700686027349",
   "email": "cryptovarma4@gmail.com",
   "updated": "15 November 2026",

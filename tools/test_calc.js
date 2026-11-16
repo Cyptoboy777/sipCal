@@ -17,5 +17,6 @@ const c2 = C.compound({ principal: 100000, rate: 8, years: 10, freq: 12, monthly
 out.ciDep = { value: c2.value, invested: c2.invested };
 const f = C.fd({ principal: 500000, rate: 7, months: 60, freq: 4 });
 out.fd = { value: f.value, eay: f.effectiveRate };
+C.setCurrency('INR');
 out.fmt = [C.inr(1234567.4), C.short(12500000), C.short(250000), C.short(45000), C.words(5000000), C.duration(18)];
 console.log(JSON.stringify(out));
